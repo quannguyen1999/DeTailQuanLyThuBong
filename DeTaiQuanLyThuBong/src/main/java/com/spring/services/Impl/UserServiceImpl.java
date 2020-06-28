@@ -18,15 +18,25 @@ import com.spring.services.dao.AccountDAO;
 
 @Service("userService")
 public class UserServiceImpl implements UserService{
+	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
 		AccountDAO listACC=new AccountLmpl();
+		
 		Account acc=listACC.timKiemUsername(username);
+		
 		if(acc==null) {
+			
 			throw new UsernameNotFoundException("username not found for"+username);
+			
 		}
+		
 		List<GrantedAuthority> granted=new ArrayList<GrantedAuthority>();
+		
 		granted.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		
 		return new org.springframework.security.core.userdetails.User(acc.getUserName(), acc.getPassword(), granted);
 	}
+	
 
 }

@@ -13,21 +13,34 @@ import com.spring.services.dao.MyEntityManager;
 import com.spring.services.dao.SupplierDAO;
 
 public class SupplierLmpl implements SupplierDAO{
+	
 	private static EntityManager em;
 
 	public SupplierLmpl(){
+		
 		em = MyEntityManager.getInstance().getEntityManager();
+		
 	}
 	
 	public boolean themSupplier(Suppliers sl) {
+		
 		EntityTransaction tr = em.getTransaction();
+		
 		try {
+			
+			
 			tr.begin();
+			
 			em.persist(sl);
+			
 			tr.commit();
+			
 		} catch (Exception e) {
+			
 			e.printStackTrace();
+			
 			tr.rollback();
+			
 			return false;
 		}
 		return true;
@@ -35,44 +48,71 @@ public class SupplierLmpl implements SupplierDAO{
 
 	
 	public boolean xoaSupplier(String masl) {
+		
 		EntityTransaction tr = em.getTransaction();
+		
 		try {
+			
 			tr.begin();
+			
 			em.remove(em.find(Suppliers.class, masl));
+			
 			tr.commit();
+			
 		} catch (Exception e) {
+			
 			e.printStackTrace();
+			
 			tr.rollback();
+			
 			return false;
+			
 		}
+		
 		return true;
 	}
 
 	
 	public List<Suppliers> layDanhSachSupplier() {
+		
 		return em.createNativeQuery("{}",Suppliers.class).getResultList();
+		
 	}
 	
 	public Suppliers timKiemId(String idSs) {
+		
 		Suppliers acc=null;
+		
 		try {
+			
 			acc=(Suppliers) em.createNativeQuery("{_id:'" + idSs + "'}",Suppliers.class).getSingleResult();;
+			
 		} catch (Exception e) {
+			
 			return null;
-			// TODO: handle exception
+			
 		}
 		return acc;
 	}
 	
 	public boolean capNhapSupplier(Suppliers sl) {
+		
 		EntityTransaction tr = em.getTransaction();
+		
 		try {
+			
 			tr.begin();
+			
 			em.merge(sl);
+			
 			tr.commit();
+			
 		} catch (Exception e) {
+			
 			e.printStackTrace();
+			
 			tr.rollback();
+			
 			return false;
 		}
 		return true;

@@ -8,15 +8,21 @@ import com.spring.entities.OrderDetails;
 import com.spring.entities.Orders;
 
 public class TwoForm {
+	
 	@Valid
 	private Orders orders;
 	
+	
 	@Valid
 	private OrderDetails orderDetails;
+	
 
 	public TwoForm(Orders orders, OrderDetails orderDetails) {
+		
 		super();
+		
 		this.orders = orders;
+		
 		this.orderDetails = orderDetails;
 	}
 

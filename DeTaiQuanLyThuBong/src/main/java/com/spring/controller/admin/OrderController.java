@@ -33,59 +33,95 @@ import com.spring.services.dao.SupplierDAO;
 @RequestMapping("/admin/datHang")
 @ControllerAdvice
 public class OrderController {
+	
 	@RequestMapping(value = "danhSach",method=RequestMethod.GET)
 	public String danhSach(ModelMap model) {
+		
 		ProductDAO proDAO=new ProductLmpl();
+		
 		OrderDAO odDAO=new OrderLmpl();
+		
 		List<Orders> listOrders=odDAO.layDanhSachOrders();
+		
 		List<LichSuOrder> listLichSuOrder=new ArrayList<LichSuOrder>();
+		
 		int tongChiPhi=0;
+		
 		for(int i=0;i<listOrders.size();i++) {
+			
 			List<OrderDetails> listOrderDetails=odDAO.timKiemMaOrderDetails(listOrders.get(i).getOrderID());
+			
 			List<OrderDetailsProduct> listOrderDetailsProduct=new ArrayList<OrderDetailsProduct>();
+			
 			tongChiPhi=0;
+			
 			for(int j=0;j<listOrderDetails.size();j++) {
+				
 				Products pro=proDAO.timKiemId(listOrderDetails.get(j).getId().getProductID());
+				
 				OrderDetailsProduct orderDetailsProduct=new OrderDetailsProduct(listOrderDetails.get(j),pro);
+				
 				listOrderDetailsProduct.add(orderDetailsProduct);
+				
 				tongChiPhi+=listOrderDetails.get(j).getTotalAmmount();
+				
 			}
+			
 			LichSuOrder lichSuOrder=new LichSuOrder(listOrders.get(i), listOrderDetailsProduct,tongChiPhi);
+			
 			listLichSuOrder.add(lichSuOrder);
 		}
+		
 		model.put("listOrder",listLichSuOrder);
+		
 		return "/admin/datHang/danhSach";
 	}
 	@RequestMapping(value = "edit/{id}",method=RequestMethod.GET)
 	public String sua(@PathVariable("id") String id,ModelMap model) {
+		
 		ProductDAO proDAO=new ProductLmpl();
+		
 		OrderDAO odDAO=new OrderLmpl();
+		
 		Orders od=odDAO.timKiemId(id);
+		
 		if(od!=null) {
+			
 			OrderDetails oddt=odDAO.timKiemOrderDetails(od.getOrderID());
+			
 			TwoForm twoForm=new TwoForm();
+			
 			twoForm.setOrderDetails(oddt);
+			
 			twoForm.setOrders(od);
+			
 			model.addAttribute("twoForm", twoForm);
+			
 			model.addAttribute("listProduct", proDAO.layDanhSachProduct());
-//			String dateOrder=new SimpleDateFormat("dd/MM/yyyy").format(twoForm.getOrders().getOrderDate());
-//			model.addAttribute("dateString", dateOrder);
+			
 		}
 		return "/admin/datHang/edit";
 	}
 	
 	@RequestMapping(value = "remove/{id}",method=RequestMethod.GET)
 	public String xoaOrder(@PathVariable("id") String idCate,HttpServletRequest request,ModelMap model) {
+		
 		OrderDAO odDAO=new OrderLmpl();
+		
 		Orders order=odDAO.timKiemId(idCate);
-		System.out.println(order);
+		
 		if(order!=null) {
+			
 				odDAO.timKiemMaOrderDetails(order.getOrderID()).forEach(x->{
+					
 					odDAO.xoaOrderDetails(x.getId().getOrderID());
+					
 				});
 				
 		}
+		
 		odDAO.xoaOrder(order.getOrderID());
+		
 		return "redirect:/admin/datHang/danhSach";
 	}
 	

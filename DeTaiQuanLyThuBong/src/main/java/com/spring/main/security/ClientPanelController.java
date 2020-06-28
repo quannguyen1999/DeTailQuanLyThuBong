@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("client-panel")
 public class ClientPanelController {
+	
 	@RequestMapping(method=RequestMethod.GET)
 	public String index() {
+		
 		return "redirect:/client-panel/login";
+		
 	}
 	
 	@RequestMapping(value="login",method=RequestMethod.GET)
@@ -22,17 +25,24 @@ public class ClientPanelController {
 			@RequestParam(value = "logout",required = false) String logout,
 			ModelMap model
 			) {
+		
 		if(error!=null) {
+			
 			model.put("msg", "mật khẩu không chính xác");
+			
 		}
+		
 		return "client/login";
 	}
 	
 
 	@RequestMapping(value = "logout",method=RequestMethod.GET)
 	public String logout(HttpServletRequest reqeust) {
+		
 		HttpSession session=reqeust.getSession();
+		
 		session.invalidate();
+		
 		return "redirect:/client-panel/login?logout";
 	}
 	

@@ -16,50 +16,80 @@ import com.spring.services.UserService;
 @EnableWebSecurity
 @Order(1)
 public class AdminSecurityConfiguration extends WebSecurityConfigurerAdapter {
+	
 	@Autowired
 	private UserService userService;
 
 	protected void configure(HttpSecurity httpSecurity) throws Exception{
+		
 		httpSecurity.cors().and().csrf().disable();
+		
 		httpSecurity
+		
 		.antMatcher("/admin/**")
+		
 		.authorizeRequests()
+		
 		.antMatchers("/admin-panel/welcome").access("hasRole('ROLE_ADMIN')")
+		
 		.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+		
 		.antMatchers("/api/**").access("hasRole('ROLE_ADMIN')")
+		
 		.and()
+		
 		.formLogin().loginPage("/admin-panel/login")
+		
 		.loginProcessingUrl("/admin/process-login")
+		
 		.defaultSuccessUrl("/admin-panel/welcome")
+		
 		.failureUrl("/admin-panel/login?error")
+		
 		.usernameParameter("username").passwordParameter("password")
+		
 		.and()
+		
 		.logout().logoutUrl("/admin-panel/process-logout")
+		
 		.logoutSuccessUrl("/admin-panel/login?logout")
+		
 		.deleteCookies("JSESSIONID")
+		
 		.invalidateHttpSession(true)
+		
 		.and()
+		
 		.exceptionHandling().accessDeniedPage("/admin-panel/accessDenied");
+		
 	}
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception{
+		
 		builder.userDetailsService(userService);
+		
 	}
 
 	@Bean
 	public BCryptPasswordEncoder encoder() {
+		
 		return new BCryptPasswordEncoder();
+		
 	}
 	
 	@Bean
 	public SecurityContextHolderAwareRequestFilter awareRequestFilter() {
+		
 		return new SecurityContextHolderAwareRequestFilter();
+		
 	}
 	
 	@Bean
 	public SecurityContextPersistenceFilter persistenceFilter() {
+		
 		return new SecurityContextPersistenceFilter();
+		
 	}
 
 }

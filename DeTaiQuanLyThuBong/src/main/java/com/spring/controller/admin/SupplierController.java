@@ -47,35 +47,57 @@ import com.spring.validators.SupplierValidator;
 @RequestMapping("/admin/nhaCungCap")
 @ControllerAdvice
 public class SupplierController {
+	
 	@RequestMapping(value = "danhSach",method=RequestMethod.GET)
 	public String danhSach(ModelMap model) {
+		
 		SupplierDAO supliDAO=new SupplierLmpl();
+		
 		model.put("listSupli",supliDAO.layDanhSachSupplier());
+		
 		return "/admin/nhaCungCap/danhSach";
+		
 	}
 
 	@RequestMapping(value = "them",method=RequestMethod.GET)
 	public String them(ModelMap model) {
+		
 		SupplierDAO supplierDAO=new SupplierLmpl();
+		
+		
 		model.put("supplier",new Suppliers());
+		
 		boolean result=false;
+		
 		String idRandom="";
+		
 		int random=0;
+		
 		while(result==false) {
+			
 			random = (int)(Math.random() * 10000 + 1);
+			
+			
 			idRandom="CT"+random;
+			
 			if(supplierDAO.timKiemId(idRandom)==null) {
+				
 				result=true;
+				
 			};
 		}
 		model.addAttribute("maSupplier",idRandom);
+		
 		return "/admin/nhaCungCap/them";
 	}
 
 	@RequestMapping(value = "edit/{id}",method=RequestMethod.GET)
 	public String sua(@PathVariable String id,ModelMap model) {
+		
 		SupplierDAO supliDAO=new SupplierLmpl();
+		
 		model.put("supplier",supliDAO.timKiemId(id));
+		
 		return "/admin/nhaCungCap/edit";
 	}
 
@@ -83,11 +105,18 @@ public class SupplierController {
 	public String processSua( @ModelAttribute("supplier") @Valid Suppliers suppliers,
 			BindingResult result,
 			Model model) throws IOException {
+		
 		SupplierDAO supliDAO=new SupplierLmpl();
+		
 		SupplierValidator supplierValidator=new SupplierValidator();
+		
 		supplierValidator.validate(suppliers,result);
+		
 		if(result.hasErrors()) {
+			
+			
 			return "/admin/nhaCungCap/edit";
+			
 		}
 		supliDAO.capNhapSupplier(suppliers);
 		return "redirect:/admin/nhaCungCap/danhSach";
@@ -95,22 +124,37 @@ public class SupplierController {
 
 	@RequestMapping(value = "remove/{id}",method=RequestMethod.GET)
 	public String remove(@PathVariable("id") String idCate,ModelMap model) {
+		
 		ProductDAO proDAO=new ProductLmpl();
+		
 		SupplierDAO supliDAO=new SupplierLmpl();
+		
 		Suppliers suppliers=supliDAO.timKiemId(idCate);
+		
 		List<Products> listPro=proDAO.timKiemTheoMaSupplier(suppliers.getSupplierID());
+		
 		for(int k=0;k<listPro.size();k++) {
+			
 			OrderDAO odDAO=new OrderLmpl();
+			
 			List<OrderDetails> listOrdersDetails=odDAO.timKiemTheoProductID(listPro.get(k).getProductID());
+			
 			if(listOrdersDetails.size()>0) {
+				
 				for(int i=0;i<listOrdersDetails.size();i++) {
+					
 					odDAO.xoaOrderDetails(listOrdersDetails.get(i).getId().getOrderID());
+					
 					odDAO.xoaOrder(listOrdersDetails.get(i).getId().getOrderID());
+					
 				}
 			}
+			
 			proDAO.xoaProduct(listPro.get(k).getProductID());
+			
 		}
 		supliDAO.xoaSupplier(idCate);
+		
 		return "redirect:/admin/nhaCungCap/danhSach";
 	}
 
@@ -118,16 +162,27 @@ public class SupplierController {
 	public String processThem( @ModelAttribute("supplier") @Valid Suppliers suppliers,
 			BindingResult result,
 			Model model) throws IOException {
+		
 		SupplierDAO supliDAO=new SupplierLmpl();
+		
 		SupplierValidator supplierValidator=new SupplierValidator();
+		
 		supplierValidator.validate(suppliers,result);
+		
 		if(result.hasErrors()) {
+			
 			return "/admin/nhaCungCap/them";
+			
 		}
+		
 		if(supliDAO.themSupplier(suppliers)==true) {
+			
 			return "/admin/nhaCungCap/themThanhCong";
+			
 		}else{
+			
 			model.addAttribute("errorMa","Thêm không thành công");
+			
 			return "admin/nhaCungCap/them";
 		}
 	}
