@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spring.entities.Account;
+import com.spring.services.EmailService;
 import com.spring.services.Impl.AccountLmpl;
 import com.spring.services.dao.AccountDAO;
 
@@ -21,18 +22,20 @@ import com.spring.services.dao.AccountDAO;
 @RequestMapping("admin2")
 public class AdminController2 {
 	@Autowired
-	private  JavaMailSender sender;
+	private  EmailService emailService;
 
 	@RequestMapping(value = "xacMinh",method=RequestMethod.GET)
 	public String xacMinh(HttpServletRequest request) {
 
 		HttpSession session=request.getSession();
 		
+		int random = (int)(Math.random() * 10000 + 1);
+		
 		try {
 			
-			int idRandDom=sendEmail();
+			emailService.sendAsync("nguyendanganhquan99@gmail.com",random);
 			
-			session.setAttribute("maXM",String.valueOf(idRandDom));
+			
 			
 		} catch (Exception e) {
 			
@@ -40,27 +43,12 @@ public class AdminController2 {
 			
 			return "admin/trangThaiGuiEmail";
 		}
+		
+		System.out.println(random);
+		
+		session.setAttribute("maXM",String.valueOf(random));
 
 		return "admin/xacMinhTaiKhoan";
-	}
-
-	public int sendEmail() throws Exception{
-		
-		MimeMessage message = sender.createMimeMessage();
-		
-		MimeMessageHelper helper = new MimeMessageHelper(message);
-		
-		helper.setSubject("Xác nhận tài khoản từ cửa hàng BearToy");
-		
-		int random = (int)(Math.random() * 10000 + 1);
-		
-		helper.setText("Mã:"+random);
-		
-		helper.setTo("nguyendanganhquan99@gmail.com");
-		
-		sender.send(message);
-		
-		return random;
 	}
 
 	@RequestMapping(value = "process-xacMinh",method=RequestMethod.POST)
@@ -69,6 +57,10 @@ public class AdminController2 {
 		HttpSession session=request.getSession();
 		
 		String idRandDom=(String) session.getAttribute("maXM");
+		
+		System.out.println("process-xac minh");
+		
+		System.out.println(idRandDom);
 		
 		if(idRandDom.equals(password)) {
 			
