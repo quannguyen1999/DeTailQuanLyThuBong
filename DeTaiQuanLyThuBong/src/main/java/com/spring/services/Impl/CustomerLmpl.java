@@ -95,7 +95,7 @@ public class CustomerLmpl implements CustomerDAO{
 		
 		try {
 			
-			acc=(Customers) em.createNativeQuery("{'email':'" + email + "'}",Customers.class).getSingleResult();;
+			acc=(Customers) em.createNativeQuery("{'email':'" + email + "'}",Customers.class).getSingleResult();
 			
 		} catch (Exception e) {
 			

@@ -20,7 +20,7 @@ import com.spring.services.dao.AccountDAO;
 
 @Controller
 @RequestMapping("admin2")
-public class AdminController2 {
+public class XacMinhController {
 	@Autowired
 	private  EmailService emailService;
 
@@ -34,7 +34,6 @@ public class AdminController2 {
 		try {
 			
 			emailService.sendAsync("nguyendanganhquan99@gmail.com",random);
-			
 			
 			
 		} catch (Exception e) {
