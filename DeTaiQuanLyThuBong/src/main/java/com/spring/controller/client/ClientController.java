@@ -62,19 +62,6 @@ import com.spring.validators.CustomerValidator;
 @ControllerAdvice
 public class ClientController {
 
-	@RequestMapping(value = "/fuck",method=RequestMethod.GET)
-	public ResponseEntity<String> fuck(ModelMap model,HttpServletRequest request) {
-
-		model.addAttribute("user", "Joe Dirt"); 
-
-		model.addAttribute("time", new Date()); 
-
-		return new ResponseEntity<String>("Asd",HttpStatus.OK);
-
-	}
-
-
-
 	@Autowired
 	private  EmailService emailService;
 
