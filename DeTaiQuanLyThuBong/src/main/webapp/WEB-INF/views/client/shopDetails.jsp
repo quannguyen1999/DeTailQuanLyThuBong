@@ -36,6 +36,54 @@
 <!-- Custom CSS -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/client/css/custom.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath }/resources/client/search/jquery-ui.css">
+
+<script
+	src="${pageContext.request.contextPath }/resources/client/search/jquery-1.12.4.js"></script>
+<script
+	src="${pageContext.request.contextPath }/resources/client/search/jquery-ui.js"></script>
+<script src="${pageContext.request.contextPath }/resources/toastr/toastr.min.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/toastr/toastr.min.css">
+<script>
+	function myFunction(x) {
+		toastr.options = {
+				  "closeButton": true,
+				  "debug": true,
+				  "newestOnTop": true,
+				  "progressBar": true,
+				  "positionClass": "toast-top-right",
+				  "preventDuplicates": false,
+				  "showDuration": "1000",
+				  "hideDuration": "1000",
+				  "timeOut": "3000",
+				  "extendedTimeOut": "1000",
+				  "showEasing": "swing",
+				  "hideEasing": "linear",
+				  "showMethod": "show",
+				  "hideMethod": "hide"
+				}
+				
+		$.ajax({
+			url : 'http://localhost:9596/client/addCartJson/'+x,
+			success : function(responseText) {
+					toastr["success"]("Thêm thành công!");
+					$('#ajaxGetUserServletResponse').html(responseText);
+			},
+			statusCode: {
+			    400: function() {
+			    	toastr["error"]("Không đủ hàng");
+			    }
+			}
+		});
+	} 
+</script>
+
+<style>
+	.toast {
+    top: 150px;
+}
+</style>
 
 <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -147,10 +195,7 @@
 					<ul>
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
 						<li class="side-menu"><a href="#" onclick="clickMyCart()">
-								<i class="fa fa-shopping-bag"></i> <span class="badge"> <c:if
-										test="${empty countCart}">
-                            		0
-                            	</c:if> ${countCart}
+								<i class="fa fa-shopping-bag"></i> <span class="badge">
 							</span>
 								<p>Thanh toán</p>
 						</a></li>
@@ -162,7 +207,7 @@
 			<div class="side" id="startSide">
 				<a href="#" class="close-side"><i class="fa fa-times"></i></a>
 				<li class="cart-box">
-					<ul class="cart-list">
+					<ul class="cart-list" id="ajaxGetUserServletResponse">
 						<c:forEach var="productX" items="${listPro}">
 							<li><a href="#" class="photo"> <img
 									src="data:image/png;base64,${productX.picture }"
@@ -279,9 +324,8 @@
 									<a class="btn hvr-hover" data-fancybox-close=""
 									href="${pageContext.request.contextPath}/client/shop">Mua
 									sản phẩm khác</a>
-									<a class="btn hvr-hover" data-fancybox-close=""
-										href="${pageContext.request.contextPath }/client/addCart/${product.productID}">Mua
-										ngay</a>
+									<button class="btn hvr-hover" style="color:white;" data-fancybox-close="" onclick="myFunction(this.value);"
+										value="${product.productID}">Mua ngay</button>
 								</c:if>
 								<c:if test="${product.quatityInStock==0}">
 									<span style="color:red;font-size:40px;">Hết hàng</span>
@@ -530,8 +574,6 @@
 
 	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
-	<script
-		src="${pageContext.request.contextPath }/resources/client/js/jquery-3.2.1.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath }/resources/client/js/popper.min.js"></script>
 	<script

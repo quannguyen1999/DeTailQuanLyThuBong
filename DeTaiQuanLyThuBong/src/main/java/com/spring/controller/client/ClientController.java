@@ -1,5 +1,6 @@
 package com.spring.controller.client;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -29,7 +33,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.spring.entities.Account;
+import com.spring.entities.Categories;
 import com.spring.entities.Customers;
 import com.spring.entities.OrderDetails;
 import com.spring.entities.Orders;
@@ -54,6 +61,19 @@ import com.spring.validators.CustomerValidator;
 @RequestMapping("/client")
 @ControllerAdvice
 public class ClientController {
+
+	@RequestMapping(value = "/fuck",method=RequestMethod.GET)
+	public ResponseEntity<String> fuck(ModelMap model,HttpServletRequest request) {
+
+		model.addAttribute("user", "Joe Dirt"); 
+
+		model.addAttribute("time", new Date()); 
+
+		return new ResponseEntity<String>("Asd",HttpStatus.OK);
+
+	}
+
+
 
 	@Autowired
 	private  EmailService emailService;
@@ -338,14 +358,14 @@ public class ClientController {
 			session.setAttribute("MaXM", String.valueOf(idRandDom));
 
 			try {
-				
+
 				emailService.sendAsync(email,idRandDom);
-				
-				
+
+
 			} catch (Exception e) {
-				
+
 				e.printStackTrace();
-				
+
 				return "admin/trangThaiGuiEmail";
 			}
 
@@ -918,7 +938,6 @@ public class ClientController {
 
 		Products product=proDAO.timKiemId(idProduct);
 
-
 		for(int i=0;i<list.size();i++) {
 
 			if(list.get(i).getProductID().equalsIgnoreCase(idProduct)) {
@@ -955,8 +974,368 @@ public class ClientController {
 	}
 
 
+	@RequestMapping(value = "addCartJson/{id}",method=RequestMethod.GET)
+	public ResponseEntity<String> addCartJson(@PathVariable("id") String idProduct,HttpServletRequest request,HttpSession sessionCart) {
+
+		System.out.println(idProduct);
+		
+		ProductDAO proDAO=new ProductLmpl();
+
+		String trangCu=(String) sessionCart.getAttribute("trangCu");
+
+		int tong=0;
+
+		ProductDAO proDAP=new ProductLmpl();
+
+		List<Products> listProduct=null;
+
+		boolean kiemTraHangTon=true;
+
+		Products pro=proDAP.timKiemId(idProduct);
+		
+		System.out.println(pro.getQuatityInStock());
+
+		if(sessionCart.getAttribute("listPro")==null) {
+
+			listProduct=new ArrayList<Products>();
+
+			if(pro.getQuatityInStock()<=0) {
+
+				kiemTraHangTon=false;
+
+			}else {
+
+				Products productDTO=new Products(pro.getProductID(), pro.getSupplierID(), pro.isDiscontinuted(), pro.getMoTa(), pro.getProductName(), 1, pro.getCategoryID(), pro.getUnitPrrice(), pro.getPicture());
+
+				listProduct.add(productDTO);
+
+				tong+=listProduct.get(0).getUnitPrrice();
+			}
+
+		}else {
+			List<Products> list = (List<Products>) sessionCart.getAttribute("listPro");
+
+			int tongR= (int) sessionCart.getAttribute("tong");
+
+			listProduct=list;
+
+			boolean result=true;
+
+			for(int i=0;i<listProduct.size();i++) {
+
+				if(listProduct.get(i).getProductID().equals(idProduct)) {
+
+					if(listProduct.get(i).getQuatityInStock()<pro.getQuatityInStock()) {
+
+						listProduct.get(i).setQuatityInStock(listProduct.get(i).getQuatityInStock()+1);
+
+						tongR+=listProduct.get(i).getUnitPrrice();
+
+						result=false;
+
+						break;
+
+					}else {
+
+						kiemTraHangTon=false;
+
+					}
 
 
+
+				}
+			}
+			if(result==true) {
+
+				//luôn luôn xảy ra
+
+				Products productDTO2=new Products(pro.getProductID(), pro.getSupplierID(), pro.isDiscontinuted(), pro.getMoTa(), pro.getProductName(), 1, pro.getCategoryID(), pro.getUnitPrrice(), pro.getPicture());
+
+				listProduct.add(productDTO2);
+
+				tongR+=productDTO2.getUnitPrrice();
+			}
+
+			tong=tongR;
+
+		}
+
+		sessionCart.setAttribute("listPro", listProduct);
+
+		sessionCart.setAttribute("countCart",listProduct.size());
+
+		sessionCart.setAttribute("tong", tong);
+
+		String pattern = "###,###.###";
+		DecimalFormat decimalFormat = new DecimalFormat(pattern);
+
+		String text="";
+		text+="<ul class=\"cart-list\" id=\"ajaxGetUserServletResponse\">";
+		for(int i=0;i<listProduct.size();i++) {
+			text+="	<li><a href=\"#\" class=\"photo\"> <img";
+			text+="			src=\"data:image/png;base64,"+listProduct.get(i).getPicture()+"\"";
+			text+="		class=\"cart-thumb\" alt=\"Image\">";
+			text+="	</a>";
+			text+="	<h6>";
+			text+="		<p>"+listProduct.get(i).getProductName()+"</p> ";
+			text+="		<br>";
+			text+="		 <a style=\"color:black;\"";
+			text+="href=\"/client/chiTietSanPham/"+listProduct.get(i).getProductID()+"\">Chi tiết</a>";
+			text+="		 |";
+			text+="	 <a style=\"color:red;\"";
+			text+="		href=\"/client/deleteMyCart/"+listProduct.get(i).getProductID()+"\">Xóa</a>";
+//			text+="		 | <a style=\"color:blue;\"";
+//			text+="			href=\"/client/addCart/"+listProduct.get(i).getProductID()+"\">Thêm</a>";
+//			text+="			 | <a style=\"color:green;\"";
+//			text+="			href=\"/client/lowMyCart/"+listProduct.get(i).getProductID()+"}\">Bớt</a>";
+			text+="	</h6>";
+			text+="	<p>x";
+			text+="		"+listProduct.get(i).getQuatityInStock()+" - <span class=\"price\">";
+			text+="				"+decimalFormat.format(listProduct.get(i).getUnitPrrice())+" đ</span>";
+			text+="	</p></li>";
+			text+="</c:forEach>";
+
+		}
+		if(listProduct.size()==0) {
+			text+="	<li>Chưa có sản phẩm nào</li>";
+		}
+
+		if(tong!=0) {
+			text+="	<li class=\"total\">";
+			text+="		<a href=\"/client/thanhToan\"";
+			text+="			class=\"btn btn-default hvr-hover btn-cart\">Đặt hàng</a>";
+			text+="		<span class=\"float-right\"><strong>Tổng</strong>:";
+			text+="			"+decimalFormat.format(tong)+" đ</span>";
+			text+="	</li>";
+			text+="</ul>";	
+		}
+
+		if(kiemTraHangTon==false) {
+
+			return new ResponseEntity<String>(text,HttpStatus.BAD_REQUEST);
+
+		}
+
+		return new ResponseEntity<String>(text,HttpStatus.OK);
+	}
+
+//	@RequestMapping(value = "addCartJson/{id}",method=RequestMethod.GET)
+//	public ResponseEntity<String> addCartJson(@PathVariable("id") String idProduct,HttpServletRequest request,HttpSession sessionCart) {
+//
+//		ProductDAO proDAO=new ProductLmpl();
+//
+//		String trangCu=(String) sessionCart.getAttribute("trangCu");
+//
+//		int tong=0;
+//
+//		ProductDAO proDAP=new ProductLmpl();
+//
+//		List<Products> listProduct=null;
+//
+//		boolean kiemTraHangTon=true;
+//
+//		Products pro=proDAP.timKiemId(idProduct);
+//
+//
+//		if(sessionCart.getAttribute("listPro")==null) {
+//
+//			listProduct=new ArrayList<Products>();
+//
+//			if(pro.getQuatityInStock()<=0) {
+//
+//				kiemTraHangTon=false;
+//
+//			}else {
+//
+//				Products productDTO=new Products(pro.getProductID(), pro.getSupplierID(), pro.isDiscontinuted(), pro.getMoTa(), pro.getProductName(), 1, pro.getCategoryID(), pro.getUnitPrrice(), pro.getPicture());
+//
+//				listProduct.add(productDTO);
+//
+//				tong+=listProduct.get(0).getUnitPrrice();
+//			}
+//
+//		}else {
+//			List<Products> list = (List<Products>) sessionCart.getAttribute("listPro");
+//
+//			int tongR= (int) sessionCart.getAttribute("tong");
+//
+//			listProduct=list;
+//
+//			boolean result=true;
+//
+//			for(int i=0;i<listProduct.size();i++) {
+//
+//				if(listProduct.get(i).getProductID().equals(idProduct)) {
+//
+//					if(listProduct.get(i).getQuatityInStock()<pro.getQuatityInStock()) {
+//
+//						listProduct.get(i).setQuatityInStock(listProduct.get(i).getQuatityInStock()+1);
+//
+//						tongR+=listProduct.get(i).getUnitPrrice();
+//
+//						result=false;
+//
+//						break;
+//
+//					}else {
+//
+//						kiemTraHangTon=false;
+//
+//					}
+//
+//
+//
+//				}
+//			}
+//			if(result==true) {
+//
+//				//luôn luôn xảy ra
+//
+//				Products productDTO2=new Products(pro.getProductID(), pro.getSupplierID(), pro.isDiscontinuted(), pro.getMoTa(), pro.getProductName(), 1, pro.getCategoryID(), pro.getUnitPrrice(), pro.getPicture());
+//
+//				listProduct.add(productDTO2);
+//
+//				tongR+=productDTO2.getUnitPrrice();
+//			}
+//
+//			tong=tongR;
+//
+//		}
+//
+//		sessionCart.setAttribute("listPro", listProduct);
+//
+//		sessionCart.setAttribute("countCart",listProduct.size());
+//
+//		sessionCart.setAttribute("tong", tong);
+//
+//		String pattern = "###,###.###";
+//		DecimalFormat decimalFormat = new DecimalFormat(pattern);
+//		
+//		CategoriesDAO categoriesDAO=new CategoriesLmpl();
+//		String text="";
+//		text+="<header class='main-header'>";
+//		text+="<!-- Start Navigation -->";
+//		text+="<nav";
+//		text+="	class='navbar navbar-expand-lg navbar-light bg-light navbar-default bootsnav'>";
+//		text+="	<div class='container'>";
+//		text+="		<!-- Start Header Navigation -->";
+//		text+="		<div class='navbar-header'>";
+//		text+="			<button class='navbar-toggler' type='button' data-toggle='collapse'";
+//		text+="				data-target='#navbar-menu' aria-controls='navbars-rs-food'";
+//		text+="			aria-expanded='false' aria-label='Toggle navigation'>";
+//		text+="			<i class='fa fa-bars'></i>";
+//		text+="		</button>";
+//		text+="			<a class='navbar-brand'";
+//		text+="			href='/client'><img";
+//		text+="	src='/resources/client/images/logo.png'";
+//		text+="width='100px;' class='logo' alt=''></a>";
+//		text+="</div>";
+//		text+="<!-- End Header Navigation -->";
+//		text+="";
+//		text+="<!-- Collect the nav links, forms, and other content for toggling -->";
+//		text+="<div class='collapse navbar-collapse' id='navbar-menu'>";
+//		text+="<ul class='nav navbar-nav ml-auto' data-in='fadeInDown'";
+//		text+="data-out='fadeOutUp'>";
+//		text+="<li class='nav-item active'><a class='nav-link'";
+//		text+="href='/client'>Trang chủ</a></li>";
+//		text+="<li class='dropdown '><a style='color: #9932CC;'";
+//		text+="href='/client/shop'";
+//		text+="class='nav-link dropdown-toggle' data-toggle='dropdown'>Cửa";
+//		text+="hàng</a>";
+//		text+="<ul class='dropdown-menu'>";
+//		
+//		List<Categories> listCategories=categoriesDAO.layDanhSachCategory();
+//		
+//		for(int i=0;i<listCategories.size();i++) {
+//			text+="<li><a style='color: white;'";
+//			text+="href='/client/shop/"+listCategories.get(i).getCategoryID()+"'>"+listCategories.get(i).getCategoryName()+"</a></li>";
+//		};
+//		
+//		
+//		text+="</ul></li>";
+//		text+="<li class='nav-item'><a class='nav-link'";
+//		text+="href='/client/lienHe'>Liên";
+//		text+="hệ</a></li>";
+//		text+="</ul>";
+//		text+="	</div>";
+//		text+="	<!-- /.navbar-collapse -->";
+//		text+="";
+//		text+="	<!-- Start Atribute Navigation -->";
+//		text+="	<div class='attr-nav'>";
+//		text+="	<ul>";
+//		text+="		<li class='search'><a href='#'><i class='fa fa-search'></i></a></li>";
+//		text+="		<li class='side-menu'><a href='#' onclick='clickMyCart()'>";
+//		
+//		text+="<i class='fa fa-shopping-bag'></i> <span class='badge'>";
+//		text+=""+listProduct.size()+"";
+//		
+//		text+="	</span>";
+//		text+="	<p>Xem giỏ hàng</p>";
+//		text+="		</a></li>";
+//		text+="		</ul>";
+//		text+="		</div>";
+//		text+="		<!-- End Atribute Navigation -->";
+//		text+="		</div>";
+//		text+="		<!-- Start Side Menu -->";
+//		text+="	<div class='side' id='startSide'>";
+//		text+="	<a href='#' class='close-side'><i class='fa fa-times'></i></a>";
+//		text+="	<li class='cart-box'>";
+//		
+//		text+="<ul class=\"cart-list\">";
+//		for(int i=0;i<listProduct.size();i++) {
+//			text+="	<li><a href=\"#\" class=\"photo\"> <img";
+//			text+="			src=\"data:image/png;base64,"+listProduct.get(i).getPicture()+"\"";
+//			text+="		class=\"cart-thumb\" alt=\"Image\">";
+//			text+="	</a>";
+//			text+="	<h6>";
+//			text+="		<p>"+listProduct.get(i).getProductName()+"</p> ";
+//			text+="		<br>";
+//			text+="		 <a style=\"color:black;\"\"";
+//			text+="href=\"/client/chiTietSanPham/"+listProduct.get(i).getProductID()+"\">Chi tiết</a>";
+//			text+="		 |";
+//			text+="	 <a style=\"color:red;\"";
+//			text+="		href=\"/client/deleteMyCart/"+listProduct.get(i).getProductID()+"\">Xóa</a>";
+//			text+="		 | <a style=\"color:blue;\"";
+//			text+="			href=\"/client/addCart/"+listProduct.get(i).getProductID()+"\">Thêm</a>";
+//			text+="			 | <a style=\"color:green;\"";
+//			text+="			href=\"/client/lowMyCart/"+listProduct.get(i).getProductID()+"}\">Bớt</a>";
+//			text+="	</h6>";
+//			text+="	<p>x";
+//			text+="		"+listProduct.get(i).getQuatityInStock()+" - <span class=\"price\">";
+//			text+="				"+decimalFormat.format(listProduct.get(i).getUnitPrrice())+" đ</span>";
+//			text+="	</p></li>";
+//			text+="</c:forEach>";
+//
+//		}
+//		if(listProduct.size()==0) {
+//			text+="	<li>Chưa có sản phẩm nào</li>";
+//		}
+//
+//		if(tong!=0) {
+//			text+="	<li class=\"total\">";
+//			text+="		<a href=\"/client/thanhToan\"";
+//			text+="			class=\"btn btn-default hvr-hover btn-cart\">Đặt hàng</a>";
+//			text+="		<span class=\"float-right\"><strong>Tổng</strong>:";
+//			text+="			"+decimalFormat.format(tong)+" đ</span>";
+//			text+="	</li>";
+//			text+="</ul>";	
+//		}
+//		text+="	</li>";
+//		text+="	</div>";
+//		text+="	<!-- End Side Menu -->";
+//		text+="	</nav>";
+//		text+="	<!-- End Navigation -->";
+//		text+="	</header>";
+//		
+//		if(kiemTraHangTon==false) {
+//
+//			return new ResponseEntity<String>(text,HttpStatus.NOT_FOUND);
+//
+//		}
+//
+//		return new ResponseEntity<String>(text,HttpStatus.OK);
+//		
+//	}
 
 
 	@RequestMapping(value = "addCart/{id}",method=RequestMethod.GET)
@@ -1019,6 +1398,7 @@ public class ClientController {
 			tong=tongR;
 
 		}
+
 		sessionCart.setAttribute("listPro", listProduct);
 
 		sessionCart.setAttribute("countCart",listProduct.size());
@@ -1185,8 +1565,6 @@ public class ClientController {
 	@RequestMapping(value = "huyMua",method=RequestMethod.GET)
 	public String huyMua(HttpServletRequest request,HttpSession sessionCart) {
 
-		String trangCu=(String) sessionCart.getAttribute("trangCu");
-
 		HttpSession session=request.getSession();
 
 		sessionCart.setAttribute("listPro", null);
@@ -1237,9 +1615,9 @@ public class ClientController {
 
 		Orders od=new Orders(customers,dateStr, idRandom, customers.getCity(), dateStr, customers.getAddress());
 
-		if(odDAO.themOrder(od)==true) {
+		List<Products> listProduct=(List<Products>) session.getAttribute("listPro");
 
-			List<Products> listProduct=(List<Products>) session.getAttribute("listPro");
+		if(odDAO.themOrder(od)==true) {
 
 			for(int i=0;i<listProduct.size();i++) {
 

@@ -50,7 +50,44 @@
 		});
 	});
 </script>
+<script src="${pageContext.request.contextPath }/resources/toastr/toastr.min.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/toastr/toastr.min.css">
+<script>
+	function myFunction(x) {
+		toastr.options = {
+				  "closeButton": true,
+				  "debug": true,
+				  "newestOnTop": true,
+				  "progressBar": true,
+				  "positionClass": "toast-top-right",
+				  "preventDuplicates": false,
+				  "showDuration": "1000",
+				  "hideDuration": "1000",
+				  "timeOut": "3000",
+				  "extendedTimeOut": "1000",
+				  "showEasing": "swing",
+				  "hideEasing": "linear",
+				  "showMethod": "show",
+				  "hideMethod": "hide"
+				}
+		$.ajax({
+			url : 'http://localhost:9596/client/addCartJson/'+x,
+			success : function(responseText) {
+					toastr["success"]("Thêm thành công!");
+					$('#ajaxGetUserServletResponse').html(responseText);
+			},
+			statusCode: {
+			    400: function() {
+			    	toastr["error"]("Không đủ hàng");
+			    }
+			}
+		});
+	} 
+</script>
 <style>
+.toast {
+    top: 150px;
+}
 .saleEdit {
 	color: #ffffff;
 	padding: 2px 10px;
@@ -172,12 +209,9 @@
 					<ul>
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
 						<li class="side-menu"><a href="#" onclick="clickMyCart()">
-								<i class="fa fa-shopping-bag"></i> <span class="badge"> <c:if
-										test="${empty countCart}">
-                            		0
-                            	</c:if> ${countCart}
+								<i class="fa fa-shopping-bag"></i> <span class="badge">
 							</span>
-								<p>Thanh toán</p>
+								<p>Xem giỏ hàng</p>
 						</a></li>
 					</ul>
 				</div>
@@ -187,7 +221,7 @@
 			<div class="side" id="startSide">
 				<a href="#" class="close-side"><i class="fa fa-times"></i></a>
 				<li class="cart-box">
-					<ul class="cart-list">
+					<ul class="cart-list"  id="ajaxGetUserServletResponse">
 						<c:forEach var="productX" items="${listPro}">
 							<li><a href="#" class="photo"> <img
 									src="data:image/png;base64,${productX.picture }"
@@ -217,7 +251,7 @@
 							<li>Chưa có sản phẩm nào</li>
 						</c:if>
 						<li class="total"><c:if test="${!empty countCart}">
-								<a href="${pageContext.request.contextPath }/client/thanhToan"
+								<a href="${pageContext.request.contextPath}/client/thanhToan"
 									class="btn btn-default hvr-hover btn-cart">Thanh toán</a>
 								<span class="float-right"><strong>Tổng</strong>:<fmt:formatNumber
 										type="number" maxFractionDigits="3" value="${tong}" /> đ</span>
@@ -426,9 +460,11 @@
 											data-placement="right" title="*"><i class="far fa-heart"></i></a></li>
 									</ul>
 									<c:if test="${product.quatityInStock!=0}">
-																<a class="cart"
-																	href="${pageContext.request.contextPath }/client/addCart/${product.productID}">Mua
-																	ngay</a>
+																<button class="cart btn hvr-hover"
+																	id="fuck" onclick="myFunction(this.value)" style="color:white;margin-top:150px;"
+																	value="${product.productID}"
+																	>Mua
+																	ngay</button>
 															</c:if>
 
 								</div>

@@ -164,12 +164,9 @@
 					<ul>
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
 						<li class="side-menu"><a href="#" onclick="clickMyCart()">
-								<i class="fa fa-shopping-bag"></i> <span class="badge"> <c:if
-										test="${empty countCart}">
-                            		0
-                            	</c:if> ${countCart}
+								<i class="fa fa-shopping-bag"></i> <span class="badge">
 							</span>
-								<p>Thanh toán</p>
+								<p>Xem giỏ hàng</p>
 						</a></li>
 					</ul>
 				</div>

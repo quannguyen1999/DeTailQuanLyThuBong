@@ -132,12 +132,9 @@
 					<ul>
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
 						<li class="side-menu"><a href="#"  onclick="clickMyCart()"> <i
-								class="fa fa-shopping-bag"></i> <span class="badge"> <c:if
-										test="${empty countCart}">
-                            		0
-                            	</c:if> ${countCart}
+								class="fa fa-shopping-bag"></i> <span class="badge">
 							</span>
-								<p>Thanh toán</p>
+								<p>Xem giỏ hàng</p>
 						</a></li>
 					</ul>
 				</div>
@@ -370,7 +367,7 @@
 	                        <div class="col-12 d-flex shopping-box"> 
 								<a href="${pageContext.request.contextPath}/client/huyMua" class="ml-auto btn hvr-hover">Hủy mua hàng</a>
 								<a href="${pageContext.request.contextPath}/client/shop" class="ml-auto btn hvr-hover">Tiếp tục mua</a>
-								<a href="${pageContext.request.contextPath}/client/datHang" class="ml-auto btn hvr-hover">Đặt hàng</a> 
+								<a href="${pageContext.request.contextPath}/client/datHang" class="ml-auto btn hvr-hover">Thanh toán</a> 
 							</div>
 						</c:if>
 						

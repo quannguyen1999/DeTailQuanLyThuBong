@@ -1,3 +1,5 @@
+<%@page import="com.spring.services.Impl.ProductLmpl"%>
+<%@page import="com.spring.services.dao.ProductDAO"%>
 <%@page import="com.spring.entities.Products"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -41,28 +43,55 @@
 	href="${pageContext.request.contextPath }/resources/client/css/custom.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/client/search/jquery-ui.css">
+
 <script
 	src="${pageContext.request.contextPath }/resources/client/search/jquery-1.12.4.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/client/search/jquery-ui.js"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#productName').autocomplete({
-			source : '${pageContext.request.contextPath}/client/search'
+<script src="${pageContext.request.contextPath }/resources/toastr/toastr.min.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/toastr/toastr.min.css">
+<script>
+	function myFunction(x) {
+		toastr.options = {
+				  "closeButton": true,
+				  "debug": true,
+				  "newestOnTop": true,
+				  "progressBar": true,
+				  "positionClass": "toast-top-right",
+				  "preventDuplicates": false,
+				  "showDuration": "1000",
+				  "hideDuration": "1000",
+				  "timeOut": "3000",
+				  "extendedTimeOut": "1000",
+				  "showEasing": "swing",
+				  "hideEasing": "linear",
+				  "showMethod": "show",
+				  "hideMethod": "hide"
+				}
+				
+		$.ajax({
+			url : 'http://localhost:9596/client/addCartJson/'+x,
+			success : function(responseText) {
+					toastr["success"]("Thêm thành công!");
+					$('#ajaxGetUserServletResponse').html(responseText);
+			},
+			statusCode: {
+			    400: function() {
+			    	toastr["error"]("Không đủ hàng");
+			    }
+			}
 		});
-	});
-
-	$(document).ready(function() {
-		$('#productNameBottom').autocomplete({
-			source : '${pageContext.request.contextPath}/client/search'
-		});
-	});
+	} 
 </script>
+
 <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 <style>
+.toast {
+    top: 150px;
+}
 .saleEdit {
 	color: #ffffff;
 	padding: 2px 10px;
@@ -181,12 +210,9 @@
 					<ul>
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
 						<li class="side-menu"><a href="#" onclick="clickMyCart()">
-								<i class="fa fa-shopping-bag"></i> <span class="badge"> <c:if
-										test="${empty countCart}">
-                            		0
-                            	</c:if> ${countCart}
+								<i class="fa fa-shopping-bag"></i> <span class="badge">
 							</span>
-								<p>Thanh toán</p>
+								<p>Xem giỏ hàng</p>
 						</a></li>
 					</ul>
 				</div>
@@ -196,7 +222,7 @@
 			<div class="side" id="startSide">
 				<a href="#" class="close-side"><i class="fa fa-times"></i></a>
 				<li class="cart-box">
-					<ul class="cart-list">
+					<ul class="cart-list"  id="ajaxGetUserServletResponse" >
 						<c:forEach var="productX" items="${listPro}">
 							<li><a href="#" class="photo"> <img
 									src="data:image/png;base64,${productX.picture }"
@@ -411,9 +437,11 @@
 																		class="far fa-heart"></i></a></li>
 															</ul>
 															<c:if test="${product.quatityInStock!=0}">
-																<a class="cart"
-																	href="${pageContext.request.contextPath }/client/addCart/${product.productID}">Mua
-																	ngay</a>
+																<button class="cart btn hvr-hover"
+																	id="fuck" onclick="myFunction(this.value)" style="color:white;margin-top:150px;"
+																	value="${product.productID}"
+																	>Mua
+																	ngay</button>
 															</c:if>
 														</div>
 													</div>
@@ -497,9 +525,11 @@
 														</h5>
 														<p>${product.moTa}.</p>
 														<c:if test="${product.quatityInStock!=0}">
-															<a class="btn hvr-hover"
-																href="${pageContext.request.contextPath }/client/addCart/${product.productID}">Mua
-																ngay</a>
+															<button class="cart btn hvr-hover"
+																	id="fuck" onclick="myFunction(this.value)" style="color:white;margin-top:150px;"
+																	value="${product.productID}"
+																	>Mua
+																	ngay</button>
 														</c:if>
 														<c:if test="${product.quatityInStock==0}">
 															<span style="color: red; font-size: 40px;">Hết
