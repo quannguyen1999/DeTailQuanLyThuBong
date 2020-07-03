@@ -438,7 +438,7 @@
 							<li><a
 								href="${pageContext.request.contextPath }/admin/datHang/danhSach">
 									<i class="metismenu-icon pe-7s-cart" style="color: White;"></i>
-									<span style="color: White;">Quản lý hàng order<span>
+									<span style="color: White;">Quản lý đơn hàng<span>
 							</a></li>
 							<li><a
 								href="${pageContext.request.contextPath }/admin/sanPham/danhSach">
@@ -487,7 +487,7 @@
 									<p style="text-align: center;"
 										class="mb-2 mr-2  btn-lg btn-block">Đặt hàng thành công</p>
 									<p style="text-align: center;"
-										class="mb-2 mr-2  btn-lg btn-block">Chi tiết hóa đơn</p>
+										class="mb-2 mr-2  btn-lg btn-block">Chi tiết đơn hàng</p>
 									<div class="card-body">
 										<div class="position-relative form-group">
 											<label for="exampleEmail" class=""> Mã order</label> <input

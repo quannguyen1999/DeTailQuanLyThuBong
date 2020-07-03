@@ -435,7 +435,7 @@
 							<li><a
 								href="${pageContext.request.contextPath }/admin/datHang/danhSach">
 									<i class="metismenu-icon pe-7s-cart" style="color: White;"></i>
-									<span style="color: White;">Quản lý hàng order<span>
+									<span style="color: White;">Quản lý đơn hàng<span>
 							</a></li>
 							<li><a
 								href="${pageContext.request.contextPath }/admin/sanPham/danhSach">

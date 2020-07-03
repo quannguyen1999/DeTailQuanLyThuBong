@@ -427,7 +427,7 @@
 									<span style="color: White;">Quản lý mặt hàng<span></a></li>
 							<li><a href="${pageContext.request.contextPath }/admin/datHang/danhSach"> <i
 									class="metismenu-icon pe-7s-cart" style="color: White;"></i>
-									<span style="color: White;">Quản lý hàng order<span></a></li>
+									<span style="color: White;">Quản lý đơn hàng<span></a></li>
 							<li><a href="${pageContext.request.contextPath }/admin/sanPham/danhSach"> <i
 									class="metismenu-icon pe-7s-box2" style="color: White;"></i>
 									<span style="color: White;">Quản lý sản phẩm<span></a></li>
