@@ -50,39 +50,7 @@
 	src="${pageContext.request.contextPath }/resources/client/search/jquery-ui.js"></script>
 <script src="${pageContext.request.contextPath }/resources/toastr/toastr.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/toastr/toastr.min.css">
-<script>
-	function myFunction(x) {
-		toastr.options = {
-				  "closeButton": true,
-				  "debug": true,
-				  "newestOnTop": true,
-				  "progressBar": true,
-				  "positionClass": "toast-top-right",
-				  "preventDuplicates": false,
-				  "showDuration": "1000",
-				  "hideDuration": "1000",
-				  "timeOut": "3000",
-				  "extendedTimeOut": "1000",
-				  "showEasing": "swing",
-				  "hideEasing": "linear",
-				  "showMethod": "show",
-				  "hideMethod": "hide"
-				}
-				
-		$.ajax({
-			url : 'http://localhost:9596/client/addCartJson/'+x,
-			success : function(responseText) {
-					toastr["success"]("Thêm thành công!");
-					$('#ajaxGetUserServletResponse').html(responseText);
-			},
-			statusCode: {
-			    400: function() {
-			    	toastr["error"]("Không đủ hàng");
-			    }
-			}
-		});
-	} 
-</script>
+<script src="${pageContext.request.contextPath }/resources/client/js/ajax/ajaxClient.js"></script>
 
 <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -237,8 +205,11 @@
 									 <a style="color:red;"
 										href="${pageContext.request.contextPath}/client/deleteMyCart/${productX.productID}">Xóa</a>
 									
-									 | <a style="color:blue;"
-										href="${pageContext.request.contextPath}/client/addCart/${productX.productID}">Thêm</a>
+									 | <button class="cart btn hvr-hover"
+																	id="fuck" onclick="myFunction(this.value)" style="color:white;margin-top:150px;"
+																	value="${product.productID}"
+																	>+
+																	</button>
 										 | <a style="color:green;"
 										href="${pageContext.request.contextPath}/client/lowMyCart/${productX.productID}">Bớt</a>
 								</h6>

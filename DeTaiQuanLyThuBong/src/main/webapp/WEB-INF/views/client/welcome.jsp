@@ -50,51 +50,25 @@
 		});
 	});
 </script>
-<script src="${pageContext.request.contextPath }/resources/toastr/toastr.min.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/toastr/toastr.min.css">
-<script>
-	function myFunction(x) {
-		toastr.options = {
-				  "closeButton": true,
-				  "debug": true,
-				  "newestOnTop": true,
-				  "progressBar": true,
-				  "positionClass": "toast-top-right",
-				  "preventDuplicates": false,
-				  "showDuration": "1000",
-				  "hideDuration": "1000",
-				  "timeOut": "3000",
-				  "extendedTimeOut": "1000",
-				  "showEasing": "swing",
-				  "hideEasing": "linear",
-				  "showMethod": "show",
-				  "hideMethod": "hide"
-				}
-		$.ajax({
-			url : 'http://localhost:9596/client/addCartJson/'+x,
-			success : function(responseText) {
-					toastr["success"]("Thêm thành công!");
-					$('#ajaxGetUserServletResponse').html(responseText);
-			},
-			statusCode: {
-			    400: function() {
-			    	toastr["error"]("Không đủ hàng");
-			    }
-			}
-		});
-	} 
-</script>
+<script
+	src="${pageContext.request.contextPath }/resources/toastr/toastr.min.js"></script>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath }/resources/toastr/toastr.min.css">
+<script
+	src="${pageContext.request.contextPath }/resources/client/js/ajax/ajaxClient.js"></script>
 <style>
 .toast {
-    top: 150px;
+	top: 150px;
 }
+
 .saleEdit {
 	color: #ffffff;
 	padding: 2px 10px;
 	font-weight: 700;
 	text-transform: uppercase;
 }
-.imageOut{
+
+.imageOut {
 	filter: brightness(50%);
 }
 </style>
@@ -125,8 +99,10 @@
 						</c:if>
 						<c:if test="${!empty customer.firstName}">
 							<ul>
-								<li><a href="${pageContext.request.contextPath}/client/thongTinCaNhan/${customer.customerID}"><i class="fa fa-user s_color"></i>
-										Account: ${customer.firstName} ${customer.lastName}</a></li>
+								<li><a
+									href="${pageContext.request.contextPath}/client/thongTinCaNhan/${customer.customerID}"><i
+										class="fa fa-user s_color"></i> Account: ${customer.firstName}
+										${customer.lastName}</a></li>
 								<li><a
 									href="${pageContext.request.contextPath }/client/lichSuGiaoDich"><i
 										class="fas fa-headset"></i>Lịch sử giao dịch</a></li>
@@ -209,8 +185,7 @@
 					<ul>
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
 						<li class="side-menu"><a href="#" onclick="clickMyCart()">
-								<i class="fa fa-shopping-bag"></i> <span class="badge">
-							</span>
+								<i class="fa fa-shopping-bag"></i> <span class="badge"> </span>
 								<p>Xem giỏ hàng</p>
 						</a></li>
 					</ul>
@@ -221,25 +196,30 @@
 			<div class="side" id="startSide">
 				<a href="#" class="close-side"><i class="fa fa-times"></i></a>
 				<li class="cart-box">
-					<ul class="cart-list"  id="ajaxGetUserServletResponse">
+					<ul class="cart-list" id="ajaxGetUserServletResponse">
 						<c:forEach var="productX" items="${listPro}">
 							<li><a href="#" class="photo"> <img
 									src="data:image/png;base64,${productX.picture }"
 									class="cart-thumb" alt="Image">
 							</a>
 								<h6>
-									<p>${productX.productName}</p> 
-									<br>
-									 <a style="color:black;"
-										href="${pageContext.request.contextPath}/client/chiTietSanPham/${productX.productID}">Chi tiết</a>
-									 |
-									 <a style="color:red;"
-										href="${pageContext.request.contextPath}/client/deleteMyCart/${productX.productID}">Xóa</a>
-									
-									 | <a style="color:blue;"
-										href="${pageContext.request.contextPath}/client/addCart/${productX.productID}">Thêm</a>
-										 | <a style="color:green;"
-										href="${pageContext.request.contextPath}/client/lowMyCart/${productX.productID}">Bớt</a>
+									<p>${productX.productName}</p>
+									<br> <a style="color: black;"
+										href="${pageContext.request.contextPath}/client/chiTietSanPham/${productX.productID}">Chi
+										tiết</a> |
+									<button class="cart btn hvr-hover"
+										style="margin-top: -10px; color: white;"
+										onclick="myFunction(this.value)" value="${productX.productID}">+
+									</button>
+									|
+									<button class="cart btn hvr-hover"
+										style="margin-top: -10px; color: white;"
+										onclick="lowMyCartFunction(this.value,this.value)"
+										value="${productX.productID}">-</button>
+									<button class="cart btn"
+										style="background-color: red; width: 100%; margin-top: 10px; color: white;"
+										onclick="deleteMyCartFunction(this.value,this.value)"
+										value="${productX.productID}">Xóa</button>
 								</h6>
 								<p>
 									${productX.quatityInStock }x - <span class="price"><fmt:formatNumber
@@ -429,23 +409,23 @@
 						<div class="products-single fix">
 							<div class="box-img-hover" style="height: 280px;">
 								<div class="type-lb">
-									
+
 									<p class="sale">${product.productName}</p>
 									<c:if test="${product.quatityInStock==0}">
-															<p class="saleEdit"
-																style="-ms-transform: rotate(20deg);; font-size: 30px; padding-top: 75px; padding-right: 60px;; text-align: center; color: white; background-color: transparent;">Hết
-																hàng</p>
-															</c:if>
+										<p class="saleEdit"
+											style="-ms-transform: rotate(20deg);; font-size: 30px; padding-top: 75px; padding-right: 60px;; text-align: center; color: white; background-color: transparent;">Hết
+											hàng</p>
+									</c:if>
 								</div>
 								<c:if test="${product.quatityInStock!=0}">
-								<img src="data:image/png;base64,${product.picture}"
-									class="img-fluid" alt="Image"
-									style="height: 280px; width: 400px;">
+									<img src="data:image/png;base64,${product.picture}"
+										class="img-fluid" alt="Image"
+										style="height: 280px; width: 400px;">
 								</c:if>
 								<c:if test="${product.quatityInStock==0}">
-								<img src="data:image/png;base64,${product.picture}"
-									class="img-fluid imageOut" alt="Image"
-									style="height: 280px; width: 400px;">
+									<img src="data:image/png;base64,${product.picture}"
+										class="img-fluid imageOut" alt="Image"
+										style="height: 280px; width: 400px;">
 								</c:if>
 								<div class="mask-icon">
 									<ul>
@@ -460,12 +440,12 @@
 											data-placement="right" title="*"><i class="far fa-heart"></i></a></li>
 									</ul>
 									<c:if test="${product.quatityInStock!=0}">
-																<button class="cart btn hvr-hover"
-																	id="fuck" onclick="myFunction(this.value)" style="color:white;margin-top:150px;"
-																	value="${product.productID}"
-																	>Mua
-																	ngay</button>
-															</c:if>
+										<button class="cart btn hvr-hover" id="fuck"
+											onclick="myFunction(this.value)"
+											style="color: white; margin-top: 150px;"
+											value="${product.productID}">Mua
+											ngay</button>
+									</c:if>
 
 								</div>
 							</div>
@@ -648,7 +628,8 @@
 							<ul>
 								<li>
 									<p>
-										<i class="fas fa-map-marker-alt"></i>Địa chỉ: 219 Huỳnh Văn Bánh,P.12,Q.Phú nhuận,HCM
+										<i class="fas fa-map-marker-alt"></i>Địa chỉ: 219 Huỳnh Văn
+										Bánh,P.12,Q.Phú nhuận,HCM
 									</p>
 								</li>
 								<li>
@@ -672,7 +653,8 @@
 							<ul>
 								<li>
 									<p>
-										<i class="fas fa-map-marker-alt"></i>Địa chỉ: 219 Huỳnh Văn Nghệ,P.12,Q.Gò vấp,HCM
+										<i class="fas fa-map-marker-alt"></i>Địa chỉ: 219 Huỳnh Văn
+										Nghệ,P.12,Q.Gò vấp,HCM
 									</p>
 								</li>
 								<li>
@@ -690,7 +672,7 @@
 							</ul>
 						</div>
 					</div>
-					
+
 				</div>
 				<hr>
 				<div class="row">
@@ -708,9 +690,11 @@
 						<div class="footer-widget">
 							<h4>Thông tin</h4>
 							<ul>
-								<li><a style="color: white;" href="#">Về chế độ bảo hành</a></li>
+								<li><a style="color: white;" href="#">Về chế độ bảo
+										hành</a></li>
 								<li><a style="color: white;" href="#">Liên hệ</a></li>
-								<li><a style="color: white;" href="#">Chính sách giao hàng</a></li>
+								<li><a style="color: white;" href="#">Chính sách giao
+										hàng</a></li>
 							</ul>
 						</div>
 					</div>
@@ -718,8 +702,9 @@
 						<div class="footer-top-box">
 							<h3>Liên hệ</h3>
 							<ul>
-								<li><a href="https://www.facebook.com/Toy-Bear-105014534189202/"><i class="fab fa-facebook"
-										aria-hidden="true"></i></a></li>
+								<li><a
+									href="https://www.facebook.com/Toy-Bear-105014534189202/"><i
+										class="fab fa-facebook" aria-hidden="true"></i></a></li>
 							</ul>
 						</div>
 					</div>
