@@ -42,6 +42,8 @@
 	src="${pageContext.request.contextPath }/resources/client/search/jquery-1.12.4.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/client/search/jquery-ui.js"></script>
+	<script
+	src="${pageContext.request.contextPath }/resources/client/js/ajax/ajaxClient.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#productName').autocomplete({
@@ -162,19 +164,25 @@
 									src="data:image/png;base64,${productX.picture }"
 									class="cart-thumb" alt="Image">
 							</a>
-								<h6>
-									<p>${productX.productName}</p> 
-									<br>
-									 <a style="color:black;"
-										href="${pageContext.request.contextPath}/client/chiTietSanPham/${productX.productID}">Chi tiết</a>
-									 |
-									 <a style="color:red;"
-										href="${pageContext.request.contextPath}/client/deleteMyCart/${productX.productID}">Xóa</a>
 									
-									 | <a style="color:blue;"
-										href="${pageContext.request.contextPath}/client/addCart/${productX.productID}">Thêm</a>
-										 | <a style="color:green;"
-										href="${pageContext.request.contextPath}/client/lowMyCart/${productX.productID}">Bớt</a>
+<h6>
+									<p>${productX.productName}</p>
+									<br> <a style="color: black;"
+										href="${pageContext.request.contextPath}/client/chiTietSanPham/${productX.productID}">Chi
+										tiết</a> |
+									<button class="cart btn hvr-hover"
+										style="margin-top: -10px; color: white;"
+										onclick="myFunction(this.value)" value="${productX.productID}">+
+									</button>
+									|
+									<button class="cart btn hvr-hover"
+										style="margin-top: -10px; color: white;"
+										onclick="lowMyCartFunction(this.value,this.value)"
+										value="${productX.productID}">-</button>
+									<button class="cart btn"
+										style="background-color: red; width: 100%; margin-top: 10px; color: white;"
+										onclick="deleteMyCartFunction(this.value,this.value)"
+										value="${productX.productID}">Xóa</button>
 								</h6>
 								<p>
 									${productX.quatityInStock }x - <span class="price"><fmt:formatNumber

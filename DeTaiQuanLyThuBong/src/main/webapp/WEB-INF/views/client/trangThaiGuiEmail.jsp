@@ -2,8 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,6 +36,8 @@
 <!-- Custom CSS -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/client/css/custom.css">
+<script
+	src="${pageContext.request.contextPath }/resources/client/js/ajax/ajaxClient.js"></script>
 
 <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -43,12 +45,12 @@
     <![endif]-->
 </head>
 <body>
-	 <!-- Start Main Top -->
+	<!-- Start Main Top -->
 	<div class="main-top">
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-				
+
 					<div class="right-phone-box">
 						<p>
 							Hotline :- <a href="#"> +0708821227</a>
@@ -57,31 +59,39 @@
 					<div class="our-link">
 						<c:if test="${empty customer.firstName}">
 							<ul>
-								<li><a href="${pageContext.request.contextPath}/client/login"><i class="fa fa-user s_color"></i> Đăng nhập</a></li>
+								<li><a
+									href="${pageContext.request.contextPath}/client/login"><i
+										class="fa fa-user s_color"></i> Đăng nhập</a></li>
 							</ul>
 						</c:if>
 						<c:if test="${!empty customer.firstName}">
 							<ul>
-								<li><a href="#"><i class="fa fa-user s_color"></i> Account: ${customer.firstName} ${customer.lastName}</a></li>
-								<li><a href="${pageContext.request.contextPath }/client/lichSuGiaoDich"><i class="fas fa-headset"></i>Lịch sử giao dịch</a></li>
+								<li><a href="#"><i class="fa fa-user s_color"></i>
+										Account: ${customer.firstName} ${customer.lastName}</a></li>
+								<li><a
+									href="${pageContext.request.contextPath }/client/lichSuGiaoDich"><i
+										class="fas fa-headset"></i>Lịch sử giao dịch</a></li>
 							</ul>
 						</c:if>
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 					<div class="login-box">
-							<c:if test="${empty customer.firstName}">
-								<a href="${pageContext.request.contextPath}/client/dangKy" style="color:white;">Đăng ký</a>
-							</c:if>
-							<c:if test="${!empty customer.firstName}">
-								<a href="${pageContext.request.contextPath}/client/dangXuat" style="color:white;">Đăng xuất</a>
-							</c:if>
+						<c:if test="${empty customer.firstName}">
+							<a href="${pageContext.request.contextPath}/client/dangKy"
+								style="color: white;">Đăng ký</a>
+						</c:if>
+						<c:if test="${!empty customer.firstName}">
+							<a href="${pageContext.request.contextPath}/client/dangXuat"
+								style="color: white;">Đăng xuất</a>
+						</c:if>
 					</div>
 					<div class="text-slid-box">
 						<div id="offer-box" class="carouselTicker">
 							<ul class="offer-box">
 								<li><i class="fab fa-opencart"></i>Cửa hàng thú bông</li>
-								<li><i class="fab fa-opencart"></i>Hàng ngàn sản phẩm đa dạng</li>
+								<li><i class="fab fa-opencart"></i>Hàng ngàn sản phẩm đa
+									dạng</li>
 							</ul>
 						</div>
 					</div>
@@ -91,7 +101,7 @@
 	</div>
 	<!-- End Main Top -->
 
-		<!-- Start Main Top -->
+	<!-- Start Main Top -->
 	<header class="main-header">
 		<!-- Start Navigation -->
 		<nav
@@ -104,7 +114,8 @@
 						aria-expanded="false" aria-label="Toggle navigation">
 						<i class="fa fa-bars"></i>
 					</button>
-					<a class="navbar-brand" href="${pageContext.request.contextPath}/client"><img
+					<a class="navbar-brand"
+						href="${pageContext.request.contextPath}/client"><img
 						src="${pageContext.request.contextPath }/resources/client/images/logo.png"
 						width="100px;" class="logo" alt=""></a>
 				</div>
@@ -114,15 +125,21 @@
 				<div class="collapse navbar-collapse" id="navbar-menu">
 					<ul class="nav navbar-nav ml-auto" data-in="fadeInDown"
 						data-out="fadeOutUp">
-						<li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/client">Trang chủ</a></li>
-						<li class="dropdown "><a href="${pageContext.request.contextPath}/client/shop"
-							class="nav-link dropdown-toggle" data-toggle="dropdown">Cửa hàng</a>
+						<li class="nav-item active"><a class="nav-link"
+							href="${pageContext.request.contextPath}/client">Trang chủ</a></li>
+						<li class="dropdown "><a
+							href="${pageContext.request.contextPath}/client/shop"
+							class="nav-link dropdown-toggle" data-toggle="dropdown">Cửa
+								hàng</a>
 							<ul class="dropdown-menu">
 								<c:forEach var="category" items="${listMatHang}">
-									<li><a style="color:white;" href="${pageContext.request.contextPath}/client/shop/${category.categoryID}">${category.categoryName }</a></li>
+									<li><a style="color: white;"
+										href="${pageContext.request.contextPath}/client/shop/${category.categoryID}">${category.categoryName }</a></li>
 								</c:forEach>
 							</ul></li>
-						<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/client/lienHe">Liên hệ</a></li>
+						<li class="nav-item"><a class="nav-link"
+							href="${pageContext.request.contextPath}/client/lienHe">Liên
+								hệ</a></li>
 					</ul>
 				</div>
 				<!-- /.navbar-collapse -->
@@ -131,9 +148,8 @@
 				<div class="attr-nav">
 					<ul>
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
-						<li class="side-menu"><a href="#"  onclick="clickMyCart()"> <i
-								class="fa fa-shopping-bag"></i> <span class="badge">
-							</span>
+						<li class="side-menu"><a href="#" onclick="clickMyCart()">
+								<i class="fa fa-shopping-bag"></i> <span class="badge"> </span>
 								<p>Xem giỏ hàng</p>
 						</a></li>
 					</ul>
@@ -150,19 +166,25 @@
 									src="data:image/png;base64,${productX.picture }"
 									class="cart-thumb" alt="Image">
 							</a>
+
 								<h6>
-									<p>${productX.productName}</p> 
-									<br>
-									 <a style="color:black;"
-										href="${pageContext.request.contextPath}/client/chiTietSanPham/${productX.productID}">Chi tiết</a>
-									 |
-									 <a style="color:red;"
-										href="${pageContext.request.contextPath}/client/deleteMyCart/${productX.productID}">Xóa</a>
-									
-									 | <a style="color:blue;"
-										href="${pageContext.request.contextPath}/client/addCart/${productX.productID}">Thêm</a>
-										 | <a style="color:green;"
-										href="${pageContext.request.contextPath}/client/lowMyCart/${productX.productID}">Bớt</a>
+									<p>${productX.productName}</p>
+									<br> <a style="color: black;"
+										href="${pageContext.request.contextPath}/client/chiTietSanPham/${productX.productID}">Chi
+										tiết</a> |
+									<button class="cart btn hvr-hover"
+										style="margin-top: -10px; color: white;"
+										onclick="myFunction(this.value)" value="${productX.productID}">+
+									</button>
+									|
+									<button class="cart btn hvr-hover"
+										style="margin-top: -10px; color: white;"
+										onclick="lowMyCartFunction(this.value,this.value)"
+										value="${productX.productID}">-</button>
+									<button class="cart btn"
+										style="background-color: red; width: 100%; margin-top: 10px; color: white;"
+										onclick="deleteMyCartFunction(this.value,this.value)"
+										value="${productX.productID}">Xóa</button>
 								</h6>
 								<p>
 									${productX.quatityInStock }x - <span class="price"><fmt:formatNumber
@@ -189,7 +211,7 @@
 	</header>
 	<!-- End Main Top -->
 
-    <!-- Start Top Search -->
+	<!-- Start Top Search -->
 	<div class="top-search">
 		<div class="container">
 			<div class="input-group">
@@ -209,7 +231,9 @@
 				<div class="col-lg-12">
 					<h2>Đăng nhập</h2>
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="${pageContext.request.contextPath }/client/shop">Trang chủ</a></li>
+						<li class="breadcrumb-item"><a
+							href="${pageContext.request.contextPath }/client/shop">Trang
+								chủ</a></li>
 						<li class="breadcrumb-item active">Đăng nhập</li>
 					</ul>
 				</div>
@@ -218,109 +242,136 @@
 	</div>
 	<!-- End All Title Box -->
 
-    <!-- Start Contact Us  -->
-    <div class="contact-box-main">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-sm-12">
-                    <div class="contact-form-right">
-                        <h2>Email gửi không thành công</h2>
-                        <p></p>
-                            <div class="row">
-                                <div class="col-md-12">
-                                   
-                                    <div class="submit-button text-center">
-                                        <a style="color:White;"  href="${pageContext.request.contextPath}/client/login" class="btn hvr-hover" id="submit" type="submit">Quay lại trang đăng nhập</a>
-                                        <div id="msgSubmit" class="h3 text-center hidden"></div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
-                </div>
+	<!-- Start Contact Us  -->
+	<div class="contact-box-main">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-sm-12">
+					<div class="contact-form-right">
+						<h2>Email gửi không thành công</h2>
+						<p></p>
+						<div class="row">
+							<div class="col-md-12">
+
+								<div class="submit-button text-center">
+									<a style="color: White;"
+										href="${pageContext.request.contextPath}/client/login"
+										class="btn hvr-hover" id="submit" type="submit">Quay lại
+										trang đăng nhập</a>
+									<div id="msgSubmit" class="h3 text-center hidden"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="col-lg-4 col-sm-12">
-                    <div class="contact-info-left">
-                        <h2>CONTACT INFO</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent urna diam, maximus ut ullamcorper quis, placerat id eros. Duis semper justo sed condimentum rutrum. Nunc tristique purus turpis. Maecenas vulputate. </p>
-                        <ul>
-                            <li>
-                                <p><i class="fas fa-map-marker-alt"></i>Address: 33/16 <br>Vu han,<br> KS 87213 </p>
-                            </li>
-                            <li>
-                                <p><i class="fas fa-phone-square"></i>Phone: <a href="tel:+1-113">+1-888 705 770</a></p>
-                            </li>
-                            <li>
-                                <p><i class="fas fa-envelope"></i>Email: <a href="mailto:contactinfo@gmail.com">contactinfo@gmail.com</a></p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Cart -->
+					<div class="contact-info-left">
+						<h2>CONTACT INFO</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+							Praesent urna diam, maximus ut ullamcorper quis, placerat id
+							eros. Duis semper justo sed condimentum rutrum. Nunc tristique
+							purus turpis. Maecenas vulputate.</p>
+						<ul>
+							<li>
+								<p>
+									<i class="fas fa-map-marker-alt"></i>Address: 33/16 <br>Vu
+									han,<br> KS 87213
+								</p>
+							</li>
+							<li>
+								<p>
+									<i class="fas fa-phone-square"></i>Phone: <a href="tel:+1-113">+1-888
+										705 770</a>
+								</p>
+							</li>
+							<li>
+								<p>
+									<i class="fas fa-envelope"></i>Email: <a
+										href="mailto:contactinfo@gmail.com">contactinfo@gmail.com</a>
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Cart -->
 
-     <!-- Start Instagram Feed  -->
-    <div class="instagram-box">
-        <div class="main-instagram owl-carousel owl-theme">
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="${pageContext.request.contextPath }/resources/client/images/f1.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-             <div class="item">
-                <div class="ins-inner-box">
-                    <img src="${pageContext.request.contextPath }/resources/client/images/a1.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="${pageContext.request.contextPath }/resources/client/images/f2.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-              <div class="item">
-                <div class="ins-inner-box">
-                    <img src="${pageContext.request.contextPath }/resources/client/images/a2.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="${pageContext.request.contextPath }/resources/client/images/f3.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-           
-          
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="${pageContext.request.contextPath }/resources/client/images/a3.jpg" alt="" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-           
-        </div>
-    </div>
-    <!-- End Instagram Feed  -->
+	<!-- Start Instagram Feed  -->
+	<div class="instagram-box">
+		<div class="main-instagram owl-carousel owl-theme">
+			<div class="item">
+				<div class="ins-inner-box">
+					<img
+						src="${pageContext.request.contextPath }/resources/client/images/f1.jpg"
+						alt="" />
+					<div class="hov-in">
+						<a href="#"><i class="fab fa-instagram"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="item">
+				<div class="ins-inner-box">
+					<img
+						src="${pageContext.request.contextPath }/resources/client/images/a1.jpg"
+						alt="" />
+					<div class="hov-in">
+						<a href="#"><i class="fab fa-instagram"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="item">
+				<div class="ins-inner-box">
+					<img
+						src="${pageContext.request.contextPath }/resources/client/images/f2.jpg"
+						alt="" />
+					<div class="hov-in">
+						<a href="#"><i class="fab fa-instagram"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="item">
+				<div class="ins-inner-box">
+					<img
+						src="${pageContext.request.contextPath }/resources/client/images/a2.jpg"
+						alt="" />
+					<div class="hov-in">
+						<a href="#"><i class="fab fa-instagram"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="item">
+				<div class="ins-inner-box">
+					<img
+						src="${pageContext.request.contextPath }/resources/client/images/f3.jpg"
+						alt="" />
+					<div class="hov-in">
+						<a href="#"><i class="fab fa-instagram"></i></a>
+					</div>
+				</div>
+			</div>
 
 
-    <!-- Start Footer  -->
-  <footer>
+			<div class="item">
+				<div class="ins-inner-box">
+					<img
+						src="${pageContext.request.contextPath }/resources/client/images/a3.jpg"
+						alt="" />
+					<div class="hov-in">
+						<a href="#"><i class="fab fa-instagram"></i></a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- End Instagram Feed  -->
+
+
+	<!-- Start Footer  -->
+	<footer>
 		<div class="footer-main">
 			<div class="container">
 				<div class="row">
@@ -334,7 +385,7 @@
 							</ul>
 						</div>
 					</div>
-					
+
 					<div class="col-lg-4 col-md-12 col-sm-12">
 						<div class="footer-top-box">
 							<h3>Liên hệ</h3>
@@ -351,7 +402,7 @@
 						<div class="footer-widget">
 							<h4>Về cửa hàng chúng tôi</h4>
 							<p>✓Chuyên Gấu Bông Nhập</p>
-							<p>✓ Đổi trả 3 ngày </p>
+							<p>✓ Đổi trả 3 ngày</p>
 							<p>✓ Giao hàng tận nơi.</p>
 							<p>✓ 100% Gòn Trắng</p>
 							<p>✓ Bảo hành Vĩnh Viễn</p>
@@ -361,9 +412,11 @@
 						<div class="footer-widget">
 							<h4>Thông tin</h4>
 							<ul>
-								<li><a style="color:white;" href="#">Về chế độ bảo hành</a></li>
-								<li><a style="color:white;" href="#">Địa chỉ</a></li>
-								<li><a style="color:white;" href="#">Chính sách giao hàng</a></li>
+								<li><a style="color: white;" href="#">Về chế độ bảo
+										hành</a></li>
+								<li><a style="color: white;" href="#">Địa chỉ</a></li>
+								<li><a style="color: white;" href="#">Chính sách giao
+										hàng</a></li>
 							</ul>
 						</div>
 					</div>
@@ -396,12 +449,12 @@
 			</div>
 		</div>
 	</footer>
-    <!-- End Footer  -->
+	<!-- End Footer  -->
 
-  
 
-    <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
-<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 	<!-- End copyright  -->
 
 	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>

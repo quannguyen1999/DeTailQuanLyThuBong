@@ -45,6 +45,8 @@
 	src="${pageContext.request.contextPath }/resources/client/search/jquery-ui.js"></script>
 <script src="${pageContext.request.contextPath }/resources/toastr/toastr.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/toastr/toastr.min.css">
+<script
+	src="${pageContext.request.contextPath }/resources/client/js/ajax/ajaxClient.js"></script>
 <script>
 	function myFunction(x) {
 		toastr.options = {
