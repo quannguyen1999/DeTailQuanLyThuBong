@@ -58,9 +58,6 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 <style>
-.toast {
-    top: 150px;
-}
 .saleEdit {
 	color: #ffffff;
 	padding: 2px 10px;

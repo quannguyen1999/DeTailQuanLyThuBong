@@ -57,10 +57,6 @@
 <script
 	src="${pageContext.request.contextPath }/resources/client/js/ajax/ajaxClient.js"></script>
 <style>
-.toast {
-	top: 150px;
-}
-
 .saleEdit {
 	color: #ffffff;
 	padding: 2px 10px;
@@ -182,7 +178,7 @@
 
 				<!-- Start Atribute Navigation -->
 				<div class="attr-nav">
-					<ul>
+					<ul id="showSoLuong">
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
 						<li class="side-menu"><a href="#" onclick="clickMyCart()">
 								<i class="fa fa-shopping-bag"></i> <span class="badge"> </span>

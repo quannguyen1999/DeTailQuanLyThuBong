@@ -524,7 +524,9 @@
 								<div class="col-lg-6">
 									<div class="main-card mb-3 card">
 										<div class="card-body">
-											<h5 class="card-title">Chọn sản phẩm <span style="color:red;">${error }</span></h5>
+											<h5 class="card-title">
+												Chọn sản phẩm <span style="color: red;">${error }</span>
+											</h5>
 											<div class="input-group">
 												<div class="input-group-prepend">
 													<span class="input-group-text" id="">@</span>
@@ -594,31 +596,25 @@
 														<td colspan="7">không có danh sách nào</td>
 													</c:if>
 													<c:forEach var="productX" items="${listSPChon}">
-															<tr>
-																<td>${productX.productID }</td>
-																<td>${productX.productName }</td>
-																<td><fmt:formatNumber type="number"
-																		maxFractionDigits="3" value="${productX.unitPrrice }" />đ
-																</td>
-																<td>${productX.quatityInStock }</td>
-																<td><img
-																	src="data:image/png;base64,${productX.picture}"
-																	width="50px;" height="50px;"></td>
-																<td>
-																		<a
-																	href="<c:url value='/admin/khachHang/sanPhams/chon/${productX.productID}'/>"
-																	class="btn btn-success">thêm</a>
-																	
-																	<a
-																	href="<c:url value='/admin/khachHang/sanPhams/bot/${productX.productID}'/>"
-																	class="btn btn-primary">bớt</a>
-																
-																	<a
-																	href="<c:url value='/admin/khachHang/sanPhams/remove/${productX.productID}'/>"
-																	onclick="return confirm('Are you sure?')"
-																	class="btn btn-danger">Xóa</a>
-																	</td>
-															</tr>
+														<tr>
+															<td>${productX.productID }</td>
+															<td>${productX.productName }</td>
+															<td><fmt:formatNumber type="number"
+																	maxFractionDigits="3" value="${productX.unitPrrice }" />đ
+															</td>
+															<td>${productX.quatityInStock }</td>
+															<td><img
+																src="data:image/png;base64,${productX.picture}"
+																width="50px;" height="50px;"></td>
+															<td><a
+																href="<c:url value='/admin/khachHang/sanPhams/chon/${productX.productID}'/>"
+																class="btn btn-success">thêm</a> <a
+																href="<c:url value='/admin/khachHang/sanPhams/bot/${productX.productID}'/>"
+																class="btn btn-primary">bớt</a> <a
+																href="<c:url value='/admin/khachHang/sanPhams/remove/${productX.productID}'/>"
+																onclick="return confirm('Are you sure?')"
+																class="btn btn-danger">Xóa</a></td>
+														</tr>
 													</c:forEach>
 												</tbody>
 											</table>
@@ -666,10 +662,16 @@
 
 																	<a type="submit"
 																		href="${pageContext.request.contextPath }/admin/khachHang/sanPhams/xacNhanOrder/${customer.customerID}"
-																		class="btn btn-success form-control">Xác nhận</a> <a
+																		class="btn btn-success form-control">Xác nhận</a>
+																	<a
+																		type="submit"
+																		href="${pageContext.request.contextPath }/admin/khachHang/clear"
+																		class="btn btn-primary form-control">clear</a>	
+																	 <a
 																		type="submit"
 																		href="${pageContext.request.contextPath }/admin/khachHang/danhSach"
 																		class="btn btn-danger form-control">Hủy</a>
+																	 
 																</div>
 															</div>
 														</div>

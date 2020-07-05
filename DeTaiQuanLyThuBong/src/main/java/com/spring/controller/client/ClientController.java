@@ -890,15 +890,15 @@ public class ClientController {
 		for(int i=0;i<list.size();i++) {
 
 			if(list.get(i).getProductID().equalsIgnoreCase(idProduct)) {
-				
+
 				tongR-=product.getUnitPrrice()*list.get(i).getQuatityInStock();
 
 				list.remove(list.get(i));
 
 			}
-		
+
 		}
-		
+
 		if(list.size()==0) {
 			sessionCart.setAttribute("listPro", null);
 
@@ -906,16 +906,16 @@ public class ClientController {
 
 			sessionCart.setAttribute("tong", null);
 		}else {
-			
+
 			sessionCart.setAttribute("listPro", list);
 
 			sessionCart.setAttribute("countCart",list.size());
 
 			sessionCart.setAttribute("tong", tongR);
-			
+
 		}
 
-		
+
 
 		if(trangCu!=null) {
 
@@ -924,7 +924,7 @@ public class ClientController {
 		}
 		return "redirect:/client/shop";
 	}
-	
+
 	@RequestMapping(value="deleteMyCartJson/{id}",method=RequestMethod.GET)
 	public ResponseEntity<String> removeOneItemInMyCartJson(@PathVariable("id") String idProduct,HttpServletRequest request,HttpSession sessionCart) {
 
@@ -941,41 +941,41 @@ public class ClientController {
 		for(int i=0;i<listProduct.size();i++) {
 
 			if(listProduct.get(i).getProductID().equalsIgnoreCase(idProduct)) {
-				
+
 				tongR-=product.getUnitPrrice()*listProduct.get(i).getQuatityInStock();
 
 				listProduct.remove(listProduct.get(i));
 
 			}
-		
+
 		}
-		
+
 		if(listProduct.size()==0) {
-			
+
 			sessionCart.setAttribute("listPro", null);
 
 			sessionCart.setAttribute("countCart",null);
 
 			sessionCart.setAttribute("tong", null);
-			
+
 		}else {
-			
+
 			sessionCart.setAttribute("listPro", listProduct);
 
 			sessionCart.setAttribute("countCart",listProduct.size());
 
 			sessionCart.setAttribute("tong", tongR);
-			
+
 		}
 
 		String text=textThanhToan(listProduct, sessionCart,tongR);
 
 
 		return new ResponseEntity<String>(text,HttpStatus.OK);
-		
+
 
 	}
-	
+
 	String textThanhToan(List<Products> listProduct,HttpSession sessionCart,int tongX) {
 		String pattern = "###,###.###";
 		DecimalFormat decimalFormat = new DecimalFormat(pattern);
@@ -993,19 +993,19 @@ public class ClientController {
 			text+="		 <a style=\"color:black;\"";
 			text+="href=\"/client/chiTietSanPham/"+listProduct.get(i).getProductID()+"\">Chi tiết</a>";
 			text+="		 |";
-			
+
 			text+="	<button class='cart btn hvr-hover' style='margin-top:-10px;color:white;'";
 			text+="			 onclick='myFunction(this.value)'";
 			text+="			value='"+listProduct.get(i).getProductID()+"'";
 			text+="			>+";
-					text+="			</button>";
+			text+="			</button>";
 			text+="			 | <button  class='cart btn hvr-hover' style='margin-top:-10px;color:white;'";
 			text+="			 onclick='lowMyCartFunction(this.value,this.value)' value='"+listProduct.get(i).getProductID()+"'>-</button>";
 			text+="	<button class='cart btn' style='background-color:red;width:100%;margin-top:10px;color:white;'";
 			text+="			 onclick='deleteMyCartFunction(this.value,this.value)'";
 			text+="			value='"+listProduct.get(i).getProductID()+"'";
 			text+="			>Xóa";
-					text+="			</button>";
+			text+="			</button>";
 			text+="	</h6>";
 			text+="	<p>x";
 			text+="		"+listProduct.get(i).getQuatityInStock()+" - <span class=\"price\">";
@@ -1025,13 +1025,13 @@ public class ClientController {
 			text+="			"+decimalFormat.format(tongX)+" đ</span>";
 			text+="	</li>";
 			text+="</ul>";	
-			
+
 			sessionCart.setAttribute("tong", tongX);
 		}
-		
+
 		return text;
 	}
-	
+
 	@RequestMapping(value="lowMyCartJson/{id}",method=RequestMethod.GET)
 	public ResponseEntity<String> lowMyCartJson(@PathVariable("id") String idProduct,HttpServletRequest request,HttpSession sessionCart) {
 
@@ -1040,14 +1040,14 @@ public class ClientController {
 		List<Products> listProduct = (List<Products>) sessionCart.getAttribute("listPro");
 
 		tongR= (int) sessionCart.getAttribute("tong");
-		
+
 		System.out.println("Start");
 		listProduct.forEach(f->{
 			System.out.println();
 			System.out.println(f.getProductID());
 			System.out.println(f.getQuatityInStock());
 		});
-		
+
 		ProductDAO proDAO=new ProductLmpl();
 
 		Products product=proDAO.timKiemId(idProduct);
@@ -1065,36 +1065,36 @@ public class ClientController {
 					tongR-=product.getUnitPrrice();
 
 				}else {
-					
+
 					tongR-=product.getUnitPrrice();
 
 				}
 
 			}
 		}
-		
+
 		System.out.println("end");
 		listProduct.forEach(f->{
 			System.out.println();
 			System.out.println(f.getProductID());
 			System.out.println(f.getQuatityInStock());
 		});
-		
+
 		if(listProduct.size()>=1) {
-			
+
 			sessionCart.setAttribute("listPro", listProduct);
 
 			sessionCart.setAttribute("countCart",listProduct.size());
-			
+
 		}else {
-			
+
 			sessionCart.setAttribute("listPro", null);
 
 			sessionCart.setAttribute("countCart",null);
-			
+
 		}
-		
-		
+
+
 
 		String text=textThanhToan(listProduct, sessionCart,tongR);
 
@@ -1154,12 +1154,10 @@ public class ClientController {
 	@RequestMapping(value = "addCartJson/{id}",method=RequestMethod.GET)
 	public ResponseEntity<String> addCartJson(@PathVariable("id") String idProduct,HttpServletRequest request,HttpSession sessionCart) {
 
-		System.out.println(idProduct);
-
 		ProductDAO proDAO=new ProductLmpl();
 
 		String trangCu=(String) sessionCart.getAttribute("trangCu");
-		
+
 		List<Products> list = (List<Products>) sessionCart.getAttribute("listPro");
 
 		int tong=0;
@@ -1200,7 +1198,7 @@ public class ClientController {
 			for(int i=0;i<listProduct.size();i++) {
 
 				if(listProduct.get(i).getProductID().equals(idProduct)) {
-					
+
 					if(listProduct.get(i).getQuatityInStock()<pro.getQuatityInStock()) {
 
 						listProduct.get(i).setQuatityInStock(listProduct.get(i).getQuatityInStock()+1);
@@ -1212,13 +1210,13 @@ public class ClientController {
 						break;
 
 					}else {
-						
+
 						result=false;
-						
+
 						kiemTraHangTon=false;
-						
+
 						break;
-						
+
 					}
 				}
 			}
@@ -1236,7 +1234,7 @@ public class ClientController {
 			tong=tongR;
 
 		}
-		
+
 
 		String text=textThanhToan(listProduct, sessionCart,tong);
 
@@ -1251,7 +1249,128 @@ public class ClientController {
 		}
 
 		return new ResponseEntity<String>(text,HttpStatus.OK);
+
 	}
+
+	@RequestMapping(value = "addCartDanhSachDaDat/{id}",method=RequestMethod.GET)
+	public ResponseEntity<String> addCartDanhSachDaDat(@PathVariable("id") String idProduct,HttpServletRequest request,HttpSession sessionCart) {
+		String text="";
+
+		String pattern = "###,###.###";
+		DecimalFormat decimalFormat = new DecimalFormat(pattern);
+
+		List<Products> list = (List<Products>) sessionCart.getAttribute("listPro");
+
+		int tong= sessionCart.getAttribute("tong")==null ? 0 : (int)sessionCart.getAttribute("tong") ;
+
+		text+="                 <div class='table-main table-responsive'>";
+		text+="				 <div class='title-left'>";
+		text+="                      <h3>Danh sách sản phẩm đã đặt</h3>";
+		text+="                  </div>";
+		text+="                  <table class='table'>";
+		text+="  <thead>";
+		text+="  <tr>";
+		text+="     <th>Hình</th>";
+		text+="     <th>tên sản phẩm</th>";
+		text+="     <th>giá</th>";
+		text+="      <th>số lượng</th>";
+		text+="       <th>tùy chọn</th>";
+		text+="       <th>xóa</th>";
+		text+="    </tr>";
+		text+=" </thead>";
+		text+=" <tbody>";
+
+		if(list==null || list.size()<=0) {
+			text+="	<td>";
+			text+="		<p>Chưa có sản phẩm nào</p>";
+			text+="		</td>";
+		}
+
+		if(list!=null && list.size()>=1) {
+			for(int i=0;i<list.size();i++) {
+				text+="		<tr>";
+				text+="			 <td class='thumbnail-img'>";
+				text+="      				  <a href='#'>";
+
+				text+="						<img class='img-fluid' src='data:image/png;base64,"+list.get(i).getPicture()+"' width='40px;' alt='' />";
+
+				text+="					</a>";
+				text+="				</td>";
+				text+="				<td class='name-pr'>";
+				text+="                          <a href='#'>";
+
+				text+="							"+list.get(i).getProductName()+"";
+
+				text+="						</a>";
+				text+="                 </td>";
+				text+="                 <td class='price-pr'>";
+				text+="                     <p>";
+
+				text+="    "+decimalFormat.format(list.get(i).getUnitPrrice())+"đ";
+
+				text+="                      </p>";
+				text+="                    </td>";
+				text+="                       <td class='quantity-box'>";
+
+				text+="                        	<input type='number' size='4' value='"+list.get(i).getQuatityInStock()+"' min='0' class='c-input-text qty text' readonly='true'>";
+
+				text+="                         </td>";
+				text+="                         <td>";
+
+				text+="                         	<button value='"+list.get(i).getProductID()+"' onclick='myFunction(this.value)' class=\"cart btn hvr-hover\" style=\"margin-top: -10px; color: white;\">+</button>";
+
+				text+="                         	<button value='"+list.get(i).getProductID()+"' onclick='lowMyCartFunction(this.value)' class=\"cart btn hvr-hover\" style=\"margin-top: -10px; color: white;\">-</button>";
+
+				text+="                         </td>";
+				text+="                         <td class='remove-pr'>";
+				text+="                            	<button value='"+list.get(i).getProductID()+"' onclick='deleteMyCartFunction(this.value,this.value)' class=\"cart btn hvr-hover\" style=\"margin-top: -10px; color: white;\">Xóa</button>";
+				text+="                          </td>";
+				text+="        				</tr>";
+			}
+		}
+		text+="          </tbody>";
+		text+="      </table>";
+		text+="		 <div class='order-box'>";
+		text+="               <div class='d-flex'>";
+		text+="                   <div class='font-weight-bold'>Sản phẩm</div>";
+		text+="                   <div class='ml-auto font-weight-bold'>Tổng</div>";
+		text+="                </div>";
+		text+="                <hr class='my-1'>";
+		text+="                <div class='d-flex'>";
+		text+="                    <h4>Tổng cộng sản phẩm</h4>";
+		text+="                     <div class='ml-auto font-weight-bold'>";
+
+		text+="  "+decimalFormat.format(tong)+"đ </div>";
+
+		text+="                 </div>";
+		text+="                 <hr class='my-1'>    ";          
+		text+="                 <div class='d-flex'>";
+		text+="                      <h4>Phí ship</h4>";
+		text+="                       <div class='ml-auto font-weight-bold'> miễn phí </div>";
+		text+="                   </div>";
+		text+="                   <hr>";
+		text+="                   <div class='d-flex gr-total'>";
+		text+="                       <h5>Tổng tất cả</h5>";
+		text+="                       <div class='ml-auto h5'>";
+
+		text+="   "+decimalFormat.format(tong)+"đ";
+
+		text+="                              </div>";
+		text+="                          </div>";
+		text+="                          <hr> </div>";
+		text+="                  </div>";
+		if(list!=null && list.size()>=1) {
+			text+="                      <div class='col-12 d-flex shopping-box'> ";
+			text+="						<a href='/client/huyMua' class='ml-auto btn hvr-hover'>Hủy mua hàng</a>";
+			text+="						<a href='/client/shop' class='ml-auto btn hvr-hover'>Tiếp tục mua</a>";
+			text+="						<a href='/client/datHang' class='ml-auto btn hvr-hover'>Thanh toán</a> ";
+			text+="					</div>";
+		}
+		text+="					</div>";
+		return new ResponseEntity<String>(text,HttpStatus.OK);
+	}
+
+
 
 	//	@RequestMapping(value = "addCartJson/{id}",method=RequestMethod.GET)
 	//	public ResponseEntity<String> addCartJson(@PathVariable("id") String idProduct,HttpServletRequest request,HttpSession sessionCart) {
@@ -1552,6 +1671,8 @@ public class ClientController {
 
 		CategoriesDAO cateDAO=new CategoriesLmpl();
 
+
+
 		model.put("listMatHang", cateDAO.layDanhSachCategory());
 
 		model.put("customer", new Customers());
@@ -1562,6 +1683,8 @@ public class ClientController {
 	@RequestMapping(value = "thanhToan",method=RequestMethod.GET)
 	public String thanhToan(HttpServletRequest request,ModelMap model) {
 
+		CategoriesDAO cateDAO=new CategoriesLmpl();
+
 		HttpSession session=request.getSession();
 
 		Customers customer=(Customers) session.getAttribute("customer");
@@ -1569,6 +1692,8 @@ public class ClientController {
 		session.setAttribute("trangCu","/client/thanhToan");
 
 		if(customer==null) {
+
+			model.put("listMatHang", cateDAO.layDanhSachCategory());
 
 			model.addAttribute("account", new Account());
 
@@ -1845,6 +1970,7 @@ public class ClientController {
 			listLichSuOrder.add(lichSuOrder);
 
 		}
+
 		model.put("listLichSuOrder",listLichSuOrder);
 
 		model.put("listMatHang", categoryDAO.layDanhSachCategory());
@@ -1852,6 +1978,7 @@ public class ClientController {
 		model.put("listProduct",proDAO.layDanhSachProduct() );
 
 		return "/client/lichSuGiaoDich";
+
 	}
 
 
@@ -1878,4 +2005,31 @@ public class ClientController {
 
 		return "redirect:/client/shop";
 	}
+
+//	@RequestMapping(value = "showSoLuongGioHang",method=RequestMethod.GET)
+//	public ResponseEntity<String> showSoLuongGioHang(HttpServletRequest request,HttpSession sessionCart) {
+//		HttpSession session=request.getSession();
+//		String text="";
+////		text+="<ul>";
+////		text+="		<li class='search'><a href='#'><i class='fa fa-search'></i></a></li>";
+////		text+="		<li class='side-menu'><a href='#' onClick=\"clickMyCart();\">";
+////		if(request.getAttribute("listPro")==null) {
+////			text+="				<i class='fa fa-shopping-bag'></i> <span class='badge'> 0 </span>";
+////		}
+////		else {
+////			List<Products> list=(ArrayList<Products>)session.getAttribute("listPro");
+////			text+="	<i class='fa fa-shopping-bag'></i> <span class='badge'> "+list.size()+" </span>";
+////		}
+////		text+="				<p>Xem giỏ hàng</p>";
+////		text+="		</a></li>";
+////		text+="	</ul>";
+//		text+="<ul>";
+//		text+="		<li class=\"search\"><a href=\"#\"><i class=\"fa fa-search\"></i></a></li>";
+//		text+="		<li class=\"side-menu\"><a href=\"#\" onclick=\"clickMyCart()\">";
+//		text+="				<i class=\"fa fa-shopping-bag\"></i> <span class=\"badge\"> 1 </span>";
+//		text+="				<p>Xem giỏ hàng</p>";
+//		text+="		</a></li>";
+//		text+="	</ul>";
+//		return new ResponseEntity<String>(text,HttpStatus.OK);
+//	}
 }
