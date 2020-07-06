@@ -1,3 +1,6 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.spring.entities.Products"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -178,12 +181,20 @@
 
 				<!-- Start Atribute Navigation -->
 				<div class="attr-nav">
-					<ul id="showSoLuong">
+					<ul>
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
-						<li class="side-menu"><a href="#" onclick="clickMyCart()">
-								<i class="fa fa-shopping-bag"></i> <span class="badge"> </span>
+						<li class="side-menu">
+							<a href="#" onclick="clickMyCart()">
+								<i class="fa fa-shopping-bag"></i> <span class="badge" id="showSoLuong">
+									<c:if
+										test="${empty countCart}">
+                            		0
+                            	</c:if> ${countCart}
+									
+								 </span>
 								<p>Xem giỏ hàng</p>
-						</a></li>
+							</a>
+						</li>
 					</ul>
 				</div>
 				<!-- End Atribute Navigation -->

@@ -147,11 +147,18 @@
 				<div class="attr-nav">
 					<ul>
 						<li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
-						<li class="side-menu"><a href="#" onclick="clickMyCart()">
-								<i class="fa fa-shopping-bag"></i> <span class="badge">
-							</span>
+						<li class="side-menu">
+							<a href="#" onclick="clickMyCart()">
+								<i class="fa fa-shopping-bag"></i> <span class="badge" id="showSoLuong">
+									<c:if
+										test="${empty countCart}">
+                            		0
+                            	</c:if> ${countCart}
+									
+								 </span>
 								<p>Xem giỏ hàng</p>
-						</a></li>
+							</a>
+						</li>
 					</ul>
 				</div>
 				<!-- End Atribute Navigation -->

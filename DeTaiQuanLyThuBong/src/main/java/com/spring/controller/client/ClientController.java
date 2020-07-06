@@ -2006,30 +2006,24 @@ public class ClientController {
 		return "redirect:/client/shop";
 	}
 
-//	@RequestMapping(value = "showSoLuongGioHang",method=RequestMethod.GET)
-//	public ResponseEntity<String> showSoLuongGioHang(HttpServletRequest request,HttpSession sessionCart) {
-//		HttpSession session=request.getSession();
-//		String text="";
-////		text+="<ul>";
-////		text+="		<li class='search'><a href='#'><i class='fa fa-search'></i></a></li>";
-////		text+="		<li class='side-menu'><a href='#' onClick=\"clickMyCart();\">";
-////		if(request.getAttribute("listPro")==null) {
-////			text+="				<i class='fa fa-shopping-bag'></i> <span class='badge'> 0 </span>";
-////		}
-////		else {
-////			List<Products> list=(ArrayList<Products>)session.getAttribute("listPro");
-////			text+="	<i class='fa fa-shopping-bag'></i> <span class='badge'> "+list.size()+" </span>";
-////		}
-////		text+="				<p>Xem giỏ hàng</p>";
-////		text+="		</a></li>";
-////		text+="	</ul>";
-//		text+="<ul>";
-//		text+="		<li class=\"search\"><a href=\"#\"><i class=\"fa fa-search\"></i></a></li>";
-//		text+="		<li class=\"side-menu\"><a href=\"#\" onclick=\"clickMyCart()\">";
-//		text+="				<i class=\"fa fa-shopping-bag\"></i> <span class=\"badge\"> 1 </span>";
-//		text+="				<p>Xem giỏ hàng</p>";
-//		text+="		</a></li>";
-//		text+="	</ul>";
-//		return new ResponseEntity<String>(text,HttpStatus.OK);
-//	}
+	@RequestMapping(value = "showSoLuongGioHang",method=RequestMethod.GET)
+	public ResponseEntity<String> showSoLuongGioHang(HttpServletRequest request,HttpSession sessionCart) {
+		HttpSession session=request.getSession();
+		
+		String text="";
+		
+		if(session.getAttribute("listPro")==null) {
+			
+			text+="0";
+			
+		}
+		else {
+			
+			List<Products> list=(ArrayList<Products>)session.getAttribute("listPro");
+			
+			text+=list.size();
+			
+		}
+		return new ResponseEntity<String>(text,HttpStatus.OK);
+	}
 }
